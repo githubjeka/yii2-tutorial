@@ -5,7 +5,7 @@
 <a href="/yii2-app-advanced/frontend/web/" target="_blank">ссылке</a>.
 
 <p class="alert alert-info">
-Пожалуйста, ознакомтесь с <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/tutorial-advanced-app.md" target="_blank">
+Пожалуйста, ознакомьтесь с <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/tutorial-advanced-app.md" target="_blank">
 официальным руководством</a>, для того чтобы иметь представление, как устроен "Шаблон приложения advanced".
 </p>
 
@@ -62,11 +62,11 @@ return [
     ],
 ];
 ```
-В нашем и предедыщем случае за соединенние с базой данной отвечает класс `yii\db\Connection`.
+В нашем и предыдущем случае за соединение с базой данной отвечает класс `yii\db\Connection`.
 <p class="alert alert-info">Рекомендуется ознокомится с <a href="http://www.yiiframework.com/doc-2.0/yii-db-connection.html" target="_blank">
 API класса Connection</a>
 </p>
-Этому классу неоходимо знать DSN, в нашем случае это путь к файлу - `/yii2-app-advanced/sqlite.db`.     
+Этому классу необходимо знать DSN, в нашем случае это путь к файлу - `/yii2-app-advanced/sqlite.db`.     
 
 > Имя источника данных (DSN) - это логическое имя, которое используется ODBC (Open Database Connectivity), чтобы 
 > обращаться к диску и другой информации, необходимой для доступа к данным.
@@ -80,7 +80,7 @@ API класса Connection</a>
  php yii migrate
  ```
  
- После этого увидете, что-то вроде: 
+ После этого увидите, что-то вроде: 
  
 ```
  yii2-tutorial\yii2-app-advanced>php yii migrate
