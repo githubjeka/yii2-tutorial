@@ -17,7 +17,7 @@
 можете легко изменить базу данных, будь то MySQL, MSSQL, PostgreSQL или другие. Для обучения будем использовать
 <a href="https://ru.wikipedia.org/wiki/SQLite" target="_blank">SQLite</a>.
 <p class="alert alert-warning">Обратите внимание, что для работы PHP и SQLite потребуется подключение php_pdo_sqlite.
-<a href="/scripts/check.php" target="_blank">Проверьте подключено ли оно у вас.</a>
+<a href="/scripts/helpers/check.php" target="_blank">Проверьте подключено ли оно у вас.</a>
 </p>
 
 Поменяем настройки для нашего сайта:
