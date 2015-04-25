@@ -1,4 +1,4 @@
-###Знакомство с шаблоном Advanced
+###Знакомство с шаблоном приложения Advanced
 
 Для перехода к следующему упражнению, выполните команду из директории yii2-tutorial
 `git checkout -f step-0`. В последствии будет установлен "Шаблон приложения advanced", который станет доступен по 
@@ -50,6 +50,11 @@ return [
 
 
 Компонент `mailer`(компонент отправки почты) оставим без изменений. А вот настройки компонента `db` изменим на
+
+<p class="alert alert-info">Подробнее о компонентах в 
+<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/structure-application-components.md" target="_blank">
+официальном руководстве</a>
+</p>
 
 ```php
 <?php
