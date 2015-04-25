@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-$this->title = 'About';
+$this->title = 'Режим работы!';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
