@@ -32,11 +32,17 @@ Zend Engine v2.6.0, Copyright (c) 1998-2014 Zend Technologies
 Если у вас возникли сложности с установкой инструментов, то обратитесь на 
 [форум за помощью](http://yiiframework.ru/forum/viewforum.php?f=17&sid=7d16a10cc45601f77dfd89c094b0b4f9))
 
-Если всё удачно, то продолжаем.
-Выполните три команды:
+Если всё удачно, то выполните три команды:
 ```
 git clone "https://github.com/githubjeka/yii2-tutorial"
 cd yii2-tutorial
 php -S localhost:9000
 ```
 и перейдите по адресу [http://localhost:9000/scripts/](http://localhost:9000/scripts/)
+
+##Обновление до актуальной версии
+
+Из директории `yii2-tutorial` необходимо выполнить команду:
+```
+git remote update
+```
