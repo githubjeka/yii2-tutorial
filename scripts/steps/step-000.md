@@ -68,7 +68,7 @@ return [
 ];
 ```
 В нашем и предыдущем случае за соединение с базой данной отвечает класс `yii\db\Connection`.
-<p class="alert alert-info">Рекомендуется ознокомится с <a href="http://www.yiiframework.com/doc-2.0/yii-db-connection.html" target="_blank">
+<p class="alert alert-info">Рекомендуется ознакомится с <a href="http://www.yiiframework.com/doc-2.0/yii-db-connection.html" target="_blank">
 API класса Connection</a>
 </p>
 Этому классу необходимо знать DSN, в нашем случае это путь к файлу - `/yii2-app-advanced/sqlite.db`.     
@@ -110,4 +110,4 @@ API класса Connection</a>
 После отправки данных, случится переход на главную страницу с последующей аутентификацией пользователя `admin`. Сейчас 
 мы находимся в пользовательском приложении (frontend). Шаблон `Advanced` также реализует административное приложение(backend).
 Чтобы попасть в него, просто перейдите по <a href="/yii2-app-advanced/backend/web/" target="_blank">ссылке</a>. 
-На данный момент backend приложение скуднее по функционалу, чем frontend. Далее постараемся исправить эту ситуацию.
+На данный момент backend приложение скуден по функционалу, чем frontend. Далее постараемся исправить эту ситуацию.
