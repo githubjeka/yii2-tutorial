@@ -261,7 +261,7 @@ if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 то срабатывает метод `sendEmail` модели, который отправляет сообщение на электронный адрес администратора. Далее 
 с помощью компонента Yii::$app->session (отвечает за сессию $_SESSION пользователя, 
 <a href="http://www.yiiframework.com/doc-2.0/yii-web-session.html" target="_blank">yii\web\Session</a> формируется для 
-пользователя статус-ответ о обработки запроса в "обратную связь" и отправляется 
+пользователя статус-ответ о обработке запроса в "обратную связь" и отправляется 
 
 ```php
 return $this->refresh();
@@ -271,7 +271,410 @@ return $this->refresh();
 
 ### Создание формы.
 
-Теперь давайте создадим новую форму.
+Построим новую форму - опрос. Сначала нужно описать модель, с которой предстоит работать.
+Сформируйте для этого новый файл `Interview.php` в директории `yii2-app-advanced/frontend/models`.
+
+```php
+<?php
+namespace frontend\models;
+
+use yii\base\Model;
+
+/**
+ * Class Interview
+ * Модель, которая описывает форму "Опрос"
+ *
+ *
+ */
+class Interview extends Model
+{
+
+}
+```
+
+Опишем  наши элементы формы:
+
+- Ф.И.О.
+- Пол
+- Какие планеты солнечной системы обитаемы?
+- Какие космонавты известны?
+- На какую планету хотели бы полететь?
+- Проверочный код
+
+```php
+class Interview extends Model
+{
+    public $name;
+    public $sex;
+    public $planets;
+    public $astronauts;
+    public $planet;
+    public $verifyCode;
+
+
+    public function attributeLabels()
+    {
+        return [
+            'name' => 'Имя',
+            'sex' => 'Пол',     
+            'planets' => 'Какие планеты обитаемы?',
+            'astronauts' => 'Какие космонавты известны?',
+            'planet' => 'На какую планету хотели бы полететь?',
+            'verifyCode' => 'Проверочный код',
+        ];
+    }
+}
+```
+
+#### Gii - магический инструмент, который может написать код за вас.
+Теперь нам необходимо создать контроллер и вид. Чтобы облегчить эту задачу, в Yii есть замечательный инструмент Gii,
+который генерирует код. Gii включен в Advanced шаблоне приложения, если это приложение инициализировано в режиме отладки,
+т.е. как было ранее сделано, через 
+
+```
+php init --env=Development
+```
+
+Позже мы познакомимся, как создавать и использовать различные режимы работы приложения. А пока вернёмся к Gii.
+
+Чтобы попасть в Gii нужно перейти по ссылке <a href="/yii2-app-advanced/frontend/web/index.php?r=gii" target="_blank">
+index.php?r=gii</a> и выбрать пункт **Form Generator**. Form Generator предназначен для генерации кода форм. Для того, 
+чтобы форма была сгенерирована, необходимо указать:
+
+- имя вида (View Name) - `site/interview`
+- имя модели с учётом пространства имён - `frontend\models\Interview`
+
+Все остальные поля оставим как есть. Нажмём кнопку Preview (предпросмотр) и посмотрим `views\interview.php` будущий код:
+
+```php
+<?php
+
+use yii\helpers\Html; 
+use yii\widgets\ActiveForm; 
+
+/* @var $this yii\web\View */ 
+/* @var $model frontend\models\Interview */ 
+/* @var $form ActiveForm */ 
+?> 
+<div class="interview"> 
+
+    <?php $form = ActiveForm::begin(); ?> 
+
+     
+        <div class="form-group"> 
+            <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?> 
+        </div> 
+    <?php ActiveForm::end(); ?> 
+
+</div><!-- interview --> 
+```
+
+Можно обратить внимание, что будет сгенерированы теги открытия и закрытия формы и кнопка для отправки формы. 
+
+А как же остальные элементы формы? Gii перед генерацией просматривает, какие атрибуты у модели являются безопасными, те и выводит.
+Так как мы не указывали правила валидации в нашей модели, то Gii посчитал все атрибуты небезопасными. Исправим это, добавив
+в модель примитивную валидацию - все поля обязательны для заполнения:
+
+```php
+public function rules()
+{
+    return [
+        [['name', 'sex', 'planets', 'astronauts', 'planet', 'verifyCode'], 'required']
+    ];
+}
+```
+
+Теперь ещё раз в Gii нажмём Preview и увидим новые элементы формы. Теперь можно нажимать Generate - будет создан вид в 
+директории `views\interview.php` и будет предложен код действия для контроллера. Чуть измененный код действия:
+
+```php
+public function actionInterview()
+{
+    $model = new \frontend\models\Interview();
+    
+    if ($model->load(Yii::$app->request->post())) {
+        if ($model->validate()) {
+            // делаем что-то, если форма прошла валидацию
+            return;
+        }
+    }
+    
+    return $this->render('interview', [
+        'model' => $model,
+    ]);
+}
+```
+
+Вставьте код этого действия в контроллер `SiteController`.
+
+Итак модель, контроллер с действием и представление созданы, теперь можно посмотреть на результат - 
+<a href="/yii2-app-advanced/frontend/web/index.php?r=site/interview" target="_blank">index.php?r=site/interview</a>
+
+<img src="/scripts/assets/screen0.2-3.jpg" class="img-responsive">
+
+#### Настройка вида формы
+
+Изменим вид формы на 
+
+<img src="/scripts/assets/screen0.2-4.jpg" class="img-responsive">
+
+- Вид элемента `name` остаётся неизменным.
+- Вид элемента `sex` необходимо переделать на выборку из двух элементов. По-умолчанию `$form->field()` генерирует 
+`<input type="text">`. Это можно изменить, через вызов дополнительных методов.
+```php
+   <?= $form->field($model, 'sex')->radioList(['Мужщина', 'Женщина']) ?>
+```
+В данном случае <a href="http://www.yiiframework.com/doc-2.0/yii-widgets-activefield.html#radioList()-detail" target="_blank">
+ActiveForm->ActiveField::radioList</a>, метод в качестве первого элемента принимает массив значений. Так как метка 
+атрибута `sex` в модели определена как `'sex' => 'Пол'`, а необходимо "Вы мужщина/женщина?". То можно изменить "пол" на "вы",
+что не совсем понятно, если эти метки в других местах (например в письме, отчётных таблицах и в прочем). Поэтому обратимся за помощью к `ActiveField::label()`. 
+
+```php
+<?= $form->field($model, 'sex')->radioList(['Мужщина', 'Женщина'])->label('Вы:') ?>
+```
+
+- Дальше идёт список checkbox элементов ". Используем метод `ActiveField::checkboxList`:
+
+```php
+<?= $form->field($model, 'planets')->checkboxList(
+    ['Меркурий', 'Венера', 'Земля', 'Марс', 'Юпитер', 'Сатурн', 'Уран', 'Нептун']
+)->label('Какие планеты по вашему мнению обитаемы?') ?>
+```
+
+- Дальше список космонавтов с множественным выбором и подсказкой - `ActiveField::dropDownList` метод:
+
+```php
+<?= $form->field($model, 'astronauts')->dropDownList(
+    [
+        'Юрий Гагарин',
+        'Алексей Леонов',
+        'Нил Армстронг',
+        'Валентина Терешкова',
+        'Эдвин Олдрин',
+        'Анатолий Соловьев'
+    ],
+    ['size' => 6, 'multiple' => true]
+)
+->hint('С помощью Ctrl вы можете выбрать более одного космонавта')
+->label('Какие космонавты вам известны?') ?>
+```
+
+`ActiveField::hint` - формирует подсказку для элемента формы.
+
+- Дальше список планет с одиночным выбором - метод `ActiveField::dropDownList`:
+```php
+<?= $form->field($model, 'planet')->dropDownList(
+    ['Меркурий', 'Венера', 'Земля', 'Марс', 'Юпитер', 'Сатурн', 'Уран', 'Нептун']
+) ?>
+```
+
+- И виджет каптчи, как элемент формы:
+
+```php
+<?= $form->field($model, 'verifyCode')->widget(
+    yii\captcha\Captcha::className(),
+    [
+        'template' => '<div class="row"><div class="col-xs-3">{image}</div><div class="col-xs-4">{input}</div></div>',        
+    ]
+)->hint('Нажмите на картинку, чтобы обновить.') ?>
+```
+
+Html шаблона у каптчи формируется исходя из свойство `yii\captcha\Captcha::template`. Чтобы настроить само `{image}` используем
+`CaptchaAction::minLength`, `CaptchaAction::maxLength`, `CaptchaAction::height` свойства, которые настраиваются в действии
+`captcha`, контроллера `SiteController`.
+
+```php
+public function actions()
+{
+    return [            
+        'captcha' => [
+            'class' => 'yii\captcha\CaptchaAction',
+            'minLength'=>3,
+            'maxLength'=>4,
+            'height'=>40,
+            'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+        ],
+        //...
+    ];
+}
+```
+<p class="alert alert-info">
+Когда формируется элемент капчта, то для получения изображения виджет <a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captcha.html" target="_blank">yii\captcha\Captcha</a> 
+по-умолчанию посылает запрос на `site/captcha`. Действие <a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captchaaction.html" target="_blank">yii\captcha\CaptchaAction</a> 
+возвращает изображение капчи и при этом сохраняет в сессию пользователя проверочный код, для последующей валидации.
+</p>
+
+Если теперь обновите страницу с формой, то заметите, что вид у неё не такой как у результата, который мы ожидали. Всё дело в
+том, что в виде `site/interview.php` используется `use \yii\widgets\ActiveForm` вместо `use yii\bootstrap\ActiveForm;`.
+Измените пространство имен на ` yii\bootstrap\`. Как описывалось ранее, это позволит использовать стили Bootstrap для форм.
+Вид формы настроен.
+
+#### Валидация формы
+
+Модель `Interview` на данный момент использует одно правило для проверки:
+
+```php
+  [['name', 'sex', 'planets', 'astronauts', 'planet', 'verifyCode'], 'required']
+```
+
+Перед тем как добавить дополнительные проверки, создадим проверочный тест формы. В Yii2 для тестирования кода используется
+<a href="http://codeception.com/" target="_blank">codeception</a>. Чтобы установить codeception нужно создать файл `composer.json`
+в любом директории? c содержимым:
+
+```json
+{
+    "require": {
+        "codeception/codeception": "*",
+        "codeception/verify": "*",
+        "codeception/specify": "*"
+    }
+}
+```
+
+и запустить из этой директории `composer install`. После автоматической установки всех зависимостей, можно запускать codeception.
+Располагается входной файл в `ваша_директория\vendor\bin\`. Но всё же лучше настроить переменную PATH (переменную) на 
+эту директории, чтобы команда `codecept` была доступена из любого места.
+
+В Yii2 Advanced всё, что нужно для работы с тестами, располагается в директории `yii2-tutorial\yii2-app-advanced\tests`.
+
+Первоначальная настройка тестового окружения сводится к:
+
+- Инициализации "действующий лиц" codecept, через команды
+
+```
+yii2-tutorial\yii2-app-advanced\tests\codeception\frontend> codecept build
+```
+
+- и (в этом уроке эта настройка уже произведена) к настройке тестовой базы данных.
+В `yii2-tutorial\yii2-app-advanced\tests\codeception\config\config.php` меняем настройки компонента `db` на:
+
+```php
+'dsn' => 'sqlite:' . dirname(__FILE__) .'/../../sqlite-test.db',
+```
+
+И запускаем миграции для тестовой базы (вот ещё одно применение миграций):
+
+```
+yii2-tutorial/yii2-app-advanced/tests/codeception/bin> php yii migrate 
+```
+ 
+Тестовая база данных нужна для того, чтобы не испортить данные на основной. Например при некоторых тестах, таблицы 
+могут быть очищены и заполнены новыми тестовыми данными.
+
+Можно попробовать запустить тесты, который содержит Advanced шаблон. Для этого выполним:
+
+```
+yii2-tutorial\yii2-app-advanced\tests\codeception\frontend> codecept run unit
+
+//...
+
+OK (8 tests, 20 assertions)
+```
+
+8 тестов с 20 проверками выполнены успешно. `run unit` обозанчает запуск юнит-тестирования.
+
+> Цель Unit тестов - изолировать отдельные части кода и показать, что по отдельности эти части работоспособны.
+ 
+Добавим свой тест для формы "Опрос". Будем использовать функциональное тестирование, так как нам нужно проверить всю форму.
+
+> Функциональное тестирование — это тестирование ПО в целях проверки реализуемости функциональных требований, то есть
+ способности ПО в определённых условиях решать задачи, нужные пользователям. 
+ 
+Создайте в `/yii2-app-advancedtests/codeception/frontend/functional/` файл `InterviewCept.php`:
+
+```php
+<?php
+use tests\codeception\frontend\FunctionalTester;
+
+/* @var $scenario Codeception\Scenario */
+
+$I = new FunctionalTester($scenario);
+```
+
+На человеческий язык, это выглядит как - "Я тестировщик функционала". `FunctionalTester` - это и есть одно из "действующий
+лиц", которые создались при первоначальной настройке Codeception. И так у нас есть объект `$I` (Я), попробуем описать
+такой тест:
+
+- Я хочу открыть страницу с формой "опроса".
+- Я хочу быть уверенным, что форма "опроса" открывается и работает.
+- Я хочу видеть ошибки, при отправке пустой формы
+- Я не хочу видеть ошибки, когда форма заполнена и отправлена.
+
+Переводим это с человеческого языка на `codeception`. Нужно описать что такое "страница с формой опроса". Создаём файл  
+`InterviewPage.php` в `tests/codeception/frontend/_pages` c следующим содержимым:
+
+```php
+<?php
+namespace tests\codeception\frontend\_pages;
+
+use \yii\codeception\BasePage;
+
+/**
+ * Описывает страницу формы "Опрос" 
+ */
+class InterviewPage extends BasePage
+{
+    public $route = 'site/interview';    
+}
+```
+
+После этого в `InterviewCept.php` дописываем:
+
+```php
+<?php
+use tests\codeception\frontend\_pages\InterviewPage;
+use tests\codeception\frontend\FunctionalTester;
+
+/* @var $scenario Codeception\Scenario */
+
+$I = new FunctionalTester($scenario);
+$I->wantTo('быть уверенным, что страница с формой "опрос" работает.'); //wantTo - хочу
+$interviewPage = InterviewPage::openBy($I);
+$I->amGoingTo('отправить форму без данных'); //amGoingTo - собираюсь
+```
+
+Тут понадобится метод, который отправит форму. Создадим его в `InterviewPage`:
+
+```php
+public function submit(array $signupData)
+{
+    foreach ($signupData as $field => $value) {
+        $inputType = $field === 'body' ? 'textarea' : 'input';
+        $this->actor->fillField($inputType . '[name="InterviewForm[' . $field . ']"]', $value);
+    }
+    $this->actor->click('interview-submit');
+}
+```
+
+`$this->actor->click('interview-submit');` будет искать кнопку с `name="interview-submit"`. Поэтому `name` следует добавить 
+к кнопке в `frontend/views/site/interview.php`:
+
+```php
+ <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'name' => 'interview-submit']) ?>
+```
+
+Дополняем тест:
+
+```
+//...
+$I->amGoingTo('отправить форму без данных'); //amGoingTo - собираюсь
+
+$I->expectTo('увидеть ошибки валидации'); //expectTo - ожидаю
+$I->see('Необходимо заполнить «Имя».', '.help-block');
+$I->see('Необходимо заполнить «Пол».', '.help-block');
+$I->see('Необходимо заполнить «Какие планеты обитаемы?».', '.help-block');
+$I->see('Необходимо заполнить «Какие космонавты известны?».', '.help-block');
+$I->see('Необходимо заполнить «Проверочный код».', '.help-block');
+```
+
+Сейчас можно запустить наш тест и убедиться, что всё верно.
+В `yii2-tutorial\yii2-app-advanced\tests\codeception\frontend`:
+
+```
+codecept run functional functional/InterviewCept.php
+
+OK (1 test, 5 assertions)
+```
 
 <p class="alert alert-info">Ознакомьтесь с информацией о работе с формами в
 <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/start-forms.md" target="_blank">официальном
