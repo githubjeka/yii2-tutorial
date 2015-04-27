@@ -39,10 +39,3 @@ cd yii2-tutorial
 php -S localhost:9000
 ```
 и перейдите по адресу [http://localhost:9000/scripts/](http://localhost:9000/scripts/)
-
-##Обновление до актуальной версии
-
-Из директории `yii2-tutorial` необходимо выполнить команду:
-```
-git remote update
-```
