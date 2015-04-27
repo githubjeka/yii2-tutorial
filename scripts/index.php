@@ -65,10 +65,10 @@ $parser = new \cebe\markdown\GithubMarkdown();
 
 <div class="row">
 
-    <div class="col-md-7">
+    <div class="col-md-8">
         <?= $parser->parse($markdown); ?>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-4">
         <ul class="nav">
             <?php foreach ($steps as $key => $_step) { ?>
                 <li>
