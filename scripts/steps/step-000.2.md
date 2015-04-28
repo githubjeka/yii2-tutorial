@@ -644,21 +644,31 @@ $interviewPage = InterviewPage::openBy($I); // открываем страниц
 $I->amGoingTo('отправить форму без данных'); //amGoingTo - собираюсь
 ```
 
-Тут понадобится метод, который отправит данные из формы. Создадим его в `InterviewPage`:
+Тут понадобится метод, который заполнит форму и отравит её. Создадим его в `InterviewPage`:
 
 ```php
-public function submit(array $formData)
+public function submit(array $signupData)
 {
-    foreach ($formData as $field => $value) {
-        $inputType = $field === 'body' ? 'textarea' : 'input';
-        $this->actor->fillField($inputType . '[name="InterviewForm[' . $field . ']"]', $value);
+    foreach ($signupData as $field => $value) {
+        if ($field === 'name' || $field === 'verifyCode') {
+            $this->actor->fillField('input[name="Interview[' . $field . ']"]', $value);
+        } elseif ($field === 'planets') {
+            foreach ($value as $val) {
+                $this->actor->checkOption('input[name="Interview[' . $field . '][]"][value=' . $val . ']');
+            }
+        } else {
+            $this->actor->selectOption('[name="Interview[' . $field . ']"]', $value);
+        }
     }
+
     $this->actor->click('interview-submit');
 }
 ```
 
-`$this->actor->click('interview-submit');` будет искать кнопку с `name="interview-submit"`. Поэтому `name` следует добавить 
-к кнопке в `frontend/views/site/interview.php`:
+где `$this->actor` - это `FunctionalTester`. В метод нужно передать массив значений формы, как `attribute=>value`.
+Actor по attribute вычисляет, как заполнить то или иное поле. Input заполнятся через `fillField`, checbox через checkOption,
+select и radio - `selectOption`. Когда всё заполнено, нажимаем на кнопку отравить.`$this->actor->click('interview-submit');` 
+будет искать кнопку с `name="interview-submit"`. Поэтому `name` следует добавить к кнопке в `frontend/views/site/interview.php`:
 
 ```php
  <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'name' => 'interview-submit']) ?>
@@ -670,12 +680,44 @@ public function submit(array $formData)
 //...
 $I->amGoingTo('отправить форму без данных'); //amGoingTo - собираюсь
 
+$interviewPage->submit([]);
+
 $I->expectTo('увидеть ошибки валидации'); //expectTo - ожидаю
 $I->see('Необходимо заполнить «Имя».', '.help-block'); //see - вижу
 $I->see('Необходимо заполнить «Пол».', '.help-block');
 $I->see('Необходимо заполнить «Какие планеты обитаемы?».', '.help-block');
 $I->see('Необходимо заполнить «Какие космонавты известны?».', '.help-block');
 $I->see('Необходимо заполнить «Проверочный код».', '.help-block');
+
+$I->amGoingTo('отправить форму c корректными данными'); //amGoingTo - собираюсь
+$interviewPage->submit([
+    'name' => 'Иванов',
+    'sex' => '1',
+    'planets' => [1,2,3],
+    'astronauts' => [1,2,3],
+    'planet' => 1,
+    'verifyCode' => 'tes0tme',
+]);
+
+$I->expectTo('не увидеть ошибки валидации'); //expectTo - ожидаю
+$I->dontSee('Необходимо заполнить «Имя».', '.help-block');
+$I->dontSee('Необходимо заполнить «Пол».', '.help-block');
+$I->dontSee('Необходимо заполнить «Какие планеты обитаемы?».', '.help-block');
+$I->dontSee('Необходимо заполнить «Какие космонавты известны?».', '.help-block');
+$I->dontSee('Необходимо заполнить «Проверочный код».', '.help-block');
+```
+
+`'verifyCode' => 'testme',` - задан именно так потому, что `SiteController::captcha` для тестового окружения фиксирует
+значение для каптчи:
+
+```php
+'captcha' => [
+    'class' => 'yii\captcha\CaptchaAction',
+    'minLength'=>3,
+    'maxLength'=>4,
+    'height'=>40,
+    'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+],
 ```
 
 Сейчас можно запустить наш тест и убедиться, что всё верно.
@@ -684,10 +726,90 @@ $I->see('Необходимо заполнить «Проверочный код
 ```
 codecept run functional functional/InterviewCept.php
 
-OK (1 test, 5 assertions)
+OK (1 test, 10 assertions)
 ```
 
-<p class="alert alert-info">Ознакомьтесь с информацией о работе с формами в
+Добавим в модели `frontend/models/Interview.php` несколько правил валидации, которые будут следить за тем, что 
+посланные данные корректные.
+
+```php
+public function rules()
+{
+    return [
+        [['name', 'sex', 'planets', 'astronauts', 'planet', 'verifyCode'], 'required'],
+        ['name', 'string'],
+        ['sex', 'boolean', 'message' => 'Пол выбран не верно.'],
+        [
+            ['planets', 'planet'],
+            'in',
+            'range' => range(0, 7),
+            'message' => 'Выбран не корректный список планет.',
+            'allowArray' => 1
+        ],
+        [
+            'astronauts',
+            'in',
+            'range' => range(0, 5),
+            'message' => 'Выбран не корректный список космонавтов.',
+            'allowArray' => 1
+        ],
+        ['verifyCode', 'captcha'],
+    ];
+}
+```
+
+Список встроенных валидаторов можно посмотреть в 
+<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/tutorial-core-validators.md" target="_blank">
+официальном руководстве</a>
+
+Добавим к нашему тесту пару проверок:
+
+```php
+//...
+
+$I->dontSee('Пол выбран не верно.', '.help-block');
+$I->dontSee('Выбран не корректный список планет.', '.help-block');
+$I->dontSee('Выбран не корректный список космонавтов.', '.help-block');
+$I->dontSee('Неправильный проверочный код.', '.help-block');
+
+$I->amGoingTo('отправить форму c некорректным проверочным кодом'); //amGoingTo - собираюсь
+$interviewPage = InterviewPage::openBy($I);
+$interviewPage->submit([
+    'verifyCode' => 'wrongText',
+]);
+
+$I->expectTo('увидеть ошибки валидации каптчи'); //expectTo - ожидаю
+$I->see('Неправильный проверочный код.', '.help-block');
+```
+
+```
+codecept run functional functional/InterviewCept.php
+
+OK (1 test, 15 assertions)
+```
+
+Перед отправкой некорректного проверочного кода, мы ещё раз открыли страницу `InterviewPage::openBy`, так как до этого
+мы отправляли корректные данные в контроллер `SiteController`:
+
+```php
+if ($model->validate()) {
+    // делаем что-то, если форма прошла валидацию
+    return;
+}
+```
+
+Т.е. контроллер вернул пустой ответ. И мы бы никаких элементов больше не нашли, поэтому и перегрузили страницу.
+
+#### Дополнительная информация для самостоятельного ознакомления:
+
+- Ознакомьтесь с информацией о работе с формами в
 <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/start-forms.md" target="_blank">официальном
 руководстве</a>.
-</p>
+
+- Ознакомьтесь с информацией о проверке данных
+<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/input-validation.md" target="_blank">официальном
+руководстве</a>.
+
+- Ознакомьтесь с информацией о генерация кода при помощи Gii
+<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/start-gii.md" target="_blank">официальном
+руководстве</a>.
