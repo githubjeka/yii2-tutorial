@@ -59,3 +59,13 @@ php init --env=Development
 После этого будут сгенерированы некоторые файлы для работы всего приложения и будет установлен режим отладки.
 Теперь вы можете перейти по <a href="/yii2-app-advanced/frontend/web/" target="_blank">ссылке</a>, чтобы убедится в 
 работоспособности вашего сайта.
+
+#### Дополнительная информация для самостоятельного ознакомления:
+
+- Ознакомьтесь с информацией об Yii
+<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/intro-yii.md" target="_blank">официальном
+руководстве</a>.
+
+- Ознакомьтесь с информацией о запуске приложения
+<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/start-forms.md" target="_blank">официальном
+руководстве</a>.
