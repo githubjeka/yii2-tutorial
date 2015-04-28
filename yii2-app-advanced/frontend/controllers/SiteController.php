@@ -60,9 +60,28 @@ class SiteController extends Controller
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
+                'minLength'=>3,
+                'maxLength'=>4,
+                'height'=>40,
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function actionInterview()
+    {
+        $model = new \frontend\models\Interview();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                // делаем что-то, если форма прошла валидацию
+                return;
+            }
+        }
+
+        return $this->render('interview', [
+            'model' => $model,
+        ]);
     }
 
     public function actionIndex()
