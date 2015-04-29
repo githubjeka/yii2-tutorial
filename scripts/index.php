@@ -3,7 +3,6 @@ if (basename($_SERVER['DOCUMENT_ROOT']) !== 'yii2-tutorial') {
     exit('Сервер PHP запущен не из той директории. Выполните "php -S localhost:9000" из "yii2-tutorial"');
 }
 
-
 $steps = [
     'main' => [
         'title' => 'Учебник',
@@ -22,24 +21,8 @@ $steps = [
         'file' => 'step-000.2.md',
     ],
     'step-1' => [
-        'title' => 'Генерация модели',
-        'file' => 'step-001.md',
-    ],
-    'step-1.1' => [
-        'title' => 'Редактирование модели',
-        'file' => 'step-001.1.md',
-    ],
-    'step-1.2' => [
-        'title' => 'Отображение моделей',
-        'file' => 'step-001.2.md',
-    ],
-    'step-2' => [
-        'title' => 'Создание связанных моделей',
-        'file' => 'step-002.md',
-    ],
-    'step-2.1' => [
-        'title' => 'Отображение связанных моделей',
-        'file' => 'step-002.1.md',
+        'title' => 'Обработка формы',
+        'file' => 'step-000.3.md',
     ],
 ];
 
