@@ -1,6 +1,8 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\behaviors\AccessOnce;
+use frontend\models\Interview;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -8,6 +10,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\base\InvalidParamException;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -24,6 +27,10 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
+            'accessOnce' => [
+                'class' => '\frontend\behaviors\AccessOnce',
+                'actions' => ['interview']
+            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'signup'],
@@ -60,9 +67,9 @@ class SiteController extends Controller
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
-                'minLength'=>3,
-                'maxLength'=>4,
-                'height'=>40,
+                'minLength' => 3,
+                'maxLength' => 4,
+                'height' => 40,
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
             'page' => [
@@ -73,18 +80,23 @@ class SiteController extends Controller
 
     public function actionInterview()
     {
-        $model = new \frontend\models\Interview();
+        $model = new Interview();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
-                // делаем что-то, если форма прошла валидацию
-                return;
+
+                Yii::$app->session->setFlash(
+                    'success',
+                    'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
+                );
+
+                return $this->redirect(Url::home());
             }
         }
 
-        return $this->render('interview', [
-            'model' => $model,
-        ]);
+        $this->detachBehaviors('accessOnce');
+
+        return $this->render('interview', ['model' => $model,]);
     }
 
     public function actionIndex()
@@ -102,9 +114,12 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+            return $this->render(
+                'login',
+                [
+                    'model' => $model,
+                ]
+            );
         }
     }
 
@@ -120,16 +135,22 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Спасибо за ваше письмо. Мы свяжемся с вами в ближайшее время.');
+                Yii::$app->session->setFlash(
+                    'success',
+                    'Спасибо за ваше письмо. Мы свяжемся с вами в ближайшее время.'
+                );
             } else {
                 Yii::$app->session->setFlash('error', 'Ошибка отправки почты.');
             }
 
             return $this->refresh();
         } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
+            return $this->render(
+                'contact',
+                [
+                    'model' => $model,
+                ]
+            );
         }
     }
 
@@ -149,9 +170,12 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
+        return $this->render(
+            'signup',
+            [
+                'model' => $model,
+            ]
+        );
     }
 
     public function actionRequestPasswordReset()
@@ -163,13 +187,19 @@ class SiteController extends Controller
 
                 return $this->goHome();
             } else {
-                Yii::$app->getSession()->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+                Yii::$app->getSession()->setFlash(
+                    'error',
+                    'Sorry, we are unable to reset password for email provided.'
+                );
             }
         }
 
-        return $this->render('requestPasswordResetToken', [
-            'model' => $model,
-        ]);
+        return $this->render(
+            'requestPasswordResetToken',
+            [
+                'model' => $model,
+            ]
+        );
     }
 
     public function actionResetPassword($token)
@@ -186,8 +216,11 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        return $this->render('resetPassword', [
-            'model' => $model,
-        ]);
+        return $this->render(
+            'resetPassword',
+            [
+                'model' => $model,
+            ]
+        );
     }
 }

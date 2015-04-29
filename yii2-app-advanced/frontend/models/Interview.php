@@ -19,6 +19,21 @@ class Interview extends Model
     public $planet;
     public $verifyCode;
 
+    public function init()
+    {
+        $handler = \Yii::createObject(
+            [
+                'class' => '\frontend\helpers\InterviewHelper',
+                'model' => $this,
+                'attributes' => ['name', 'sex', 'planets', 'astronauts', 'planet'],
+            ]
+        );
+
+        $this->on($this::EVENT_AFTER_VALIDATE, [$handler, 'insertData']);
+
+        parent::init();
+    }
+
     public function rules()
     {
         return [
