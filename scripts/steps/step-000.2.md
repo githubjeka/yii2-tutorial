@@ -647,9 +647,9 @@ $I->amGoingTo('отправить форму без данных'); //amGoingTo 
 Тут понадобится метод, который заполнит форму и отравит её. Создадим его в `InterviewPage`:
 
 ```php
-public function submit(array $signupData)
+public function submit(array $formData)
 {
-    foreach ($signupData as $field => $value) {
+    foreach ($formData as $field => $value) {
         if ($field === 'name' || $field === 'verifyCode') {
             $this->actor->fillField('input[name="Interview[' . $field . ']"]', $value);
         } elseif ($field === 'planets') {
@@ -665,16 +665,17 @@ public function submit(array $signupData)
 }
 ```
 
-где `$this->actor` - это `FunctionalTester`. В метод нужно передать массив значений формы, как `attribute=>value`.
-Actor по attribute вычисляет, как заполнить то или иное поле. Input заполнятся через `fillField`, checbox через checkOption,
-select и radio - `selectOption`. Когда всё заполнено, нажимаем на кнопку отравить.`$this->actor->click('interview-submit');` 
-будет искать кнопку с `name="interview-submit"`. Поэтому `name` следует добавить к кнопке в `frontend/views/site/interview.php`:
+где `$this->actor` - это `FunctionalTester`. В метод нужно передать массив значений формы `$formData`, в виде `attribute=>value`.
+Actor по attribute вычисляет, как заполнить то или иное поле. Input заполнятся через `fillField()`, checkbox через `checkOption()`,
+select и radio - `selectOption()`. Когда всё заполнено, тестировщик нажимает на кнопку отравить.`$this->actor->click('interview-submit');`.
+На данный момент кнопки с `name="interview-submit"` в виде `frontend/views/site/interview.php` нет.  Поэтому следует добавить к кнопке 
+`name`:
 
 ```php
  <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'name' => 'interview-submit']) ?>
 ```
 
-Дополняем тест:
+Дополняем тест проверками:
 
 ```
 //...
@@ -707,8 +708,8 @@ $I->dontSee('Необходимо заполнить «Какие космона
 $I->dontSee('Необходимо заполнить «Проверочный код».', '.help-block');
 ```
 
-`'verifyCode' => 'testme',` - задан именно так потому, что `SiteController::captcha` для тестового окружения фиксирует
-значение для каптчи:
+`'verifyCode' => 'testme',` - задан именно так потому, что `SiteController::captchaAction` фиксирует
+значение для каптчи, если приложение запущено в режиме тестов:
 
 ```php
 'captcha' => [
