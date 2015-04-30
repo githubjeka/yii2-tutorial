@@ -19,21 +19,6 @@ class Interview extends Model
     public $planet;
     public $verifyCode;
 
-    public function init()
-    {
-        $handler = \Yii::createObject(
-            [
-                'class' => '\frontend\helpers\InterviewHelper',
-                'model' => $this,
-                'attributes' => ['name', 'sex', 'planets', 'astronauts', 'planet'],
-            ]
-        );
-
-        $this->on($this::EVENT_AFTER_VALIDATE, [$handler, 'insertData']);
-
-        parent::init();
-    }
-
     public function rules()
     {
         return [
@@ -68,5 +53,23 @@ class Interview extends Model
             'planet' => 'На какую планету хотели бы полететь?',
             'verifyCode' => 'Проверочный код',
         ];
+    }
+
+    public function save(array $attributes)
+    {
+        if ($this->validate()) {
+
+            $values = $this->getAttributes($attributes);
+
+            foreach ($values as &$value) {
+                if (is_array($value)) {
+                    $value = implode(',', $value);
+                }
+            }
+
+            return \Yii::$app->db->createCommand()->insert('interview', $values)->execute();
+        }
+
+        return false;
     }
 }

@@ -82,16 +82,12 @@ class SiteController extends Controller
     {
         $model = new Interview();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->validate()) {
-
-                Yii::$app->session->setFlash(
-                    'success',
-                    'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
-                );
-
-                return $this->redirect(Url::home());
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save(['name', 'sex', 'planets', 'astronauts', 'planet'])) {
+            Yii::$app->session->setFlash(
+                'success',
+                'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
+            );
+            return $this->redirect(Url::home());
         }
 
         $this->detachBehaviors('accessOnce');
