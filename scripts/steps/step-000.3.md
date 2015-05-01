@@ -520,5 +520,9 @@ public function actionInterview()
 
 #### Дополнительная информация для самостоятельного ознакомления:
 
-- Освежите знания о <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/concept-components.md" target="_blank">компонентах Yii</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/structure-models.md" target="_blank">Модели</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/start-databases.md" target="_blank">Работа с базами данных</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/concept-components.md" target="_blank">Компоненты</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/runtime-sessions-cookies.md" target="_blank">Сессии и куки</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/runtime-routing.md" target="_blank">Работа с URL</a>.
 
