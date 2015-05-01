@@ -131,7 +131,7 @@ Url формируется как id контроллера и id действи
 'homeUrl' => ['/site/page', 'view'=>'duty'],
 ```
 
-- если это строка, то путь будет создан не как `.../web/index.php?r=/site/interview`, а как `http://localhost:9000/site/interview`
+- если это строка, то путь будет создан не как `.../web/index.php?r=/site/interview`, а как `http://localhost:8888/site/interview`
 
 Имя приложения и язык приложения мы настраивали `yii2-app-advanced/common/config/main.php`. Эта конфигурация располагается
 в директории `common`, что означает что конфигурация будет применена ко всем приложениями - консольному, административной 

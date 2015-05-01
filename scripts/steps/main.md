@@ -67,5 +67,5 @@ php init --env=Development
 руководстве</a>.
 
 - Ознакомьтесь с информацией о запуске приложения
-<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/start-forms.md" target="_blank">официальном
+<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/start-workflow.md" target="_blank">официальном
 руководстве</a>.

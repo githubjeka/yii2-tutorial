@@ -10,7 +10,7 @@
 </p>
 
 Все статичные страницы нашего приложения не требуют каких-либо данных. А вот страница `Signup`(регистрация пользователей)
-требует подключения к базе данных. Если на <a href="http://localhost:9000/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">
+требует подключения к базе данных. Если на <a href="/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">
 этой странице</a> ввести в поля какие-либо данные и нажать кнопку "Signup", то скорее всего увидите ошибку `Database Exception...`.
 
 Сейчас наш сайт пытается подключится к базе данных `yii2advanced` MySQL. Yii не ограничивает вас в выборе базы данных, вы
@@ -78,36 +78,36 @@ API класса Connection</a>
 
 После настройки подключения, необходимо наполнить данные в базу данных. Для это будем использовать "миграции". 
 Для чего нужны миграции? Вот сейчас нужно заполнить sqlite данными, создать таблицы и чтобы не описывать десятки sql запросов, 
- которые вы должны выполнить, была создана одна миграция. Всё что вам нужно сделать, это выполнить консольную команду в 
- `yii2-app-advanced`:
+которые вы должны выполнить, была создана одна миграция. Всё что вам нужно сделать, это выполнить консольную команду в 
+`yii2-app-advanced`:
  
- ```
+```
  php yii migrate
- ```
+```
  
 После этого увидите, что-то вроде: 
  
 ```
- yii2-tutorial\yii2-app-advanced>php yii migrate
- Yii Migration Tool (based on Yii v2.0.3)
- 
- Total 1 new migration to be applied:
-         m130524_201442_init
- 
- Apply the above migration? (yes|no) [no]:y
- *** applying m130524_201442_init
-     > create table {{%user}} ... done (time: 0.059s)
- *** applied m130524_201442_init (time: 0.111s)
- 
- 
- Migrated up successfully.
+yii2-tutorial\yii2-app-advanced>php yii migrate
+Yii Migration Tool (based on Yii v2.0.3)
+
+Total 1 new migration to be applied:
+     m130524_201442_init
+
+Apply the above migration? (yes|no) [no]:y
+*** applying m130524_201442_init
+ > create table {{%user}} ... done (time: 0.059s)
+*** applied m130524_201442_init (time: 0.111s)
+
+
+Migrated up successfully.
 ```
  
 Теперь в `yii2-app-advanced` можно обнаружить файл `sqlite.db` - это и есть наша база данных. 
 
-Ну что ж, вернёмся на <a href="http://localhost:9000/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">Signup</a>
+Ну что ж, вернёмся на <a href="/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">Signup</a>
 и попробуем ввести регистрационные данные: `Username` - `admin`, `Email` - `admin@local.net`, `Password` - `123456`.
 После отправки данных, случится переход на главную страницу с последующей аутентификацией пользователя `admin`. Сейчас 
 мы находимся в пользовательском приложении (frontend). Шаблон `Advanced` также реализует административное приложение(backend).
 Чтобы попасть в него, просто перейдите по <a href="/yii2-app-advanced/backend/web/" target="_blank">ссылке</a>. 
-На данный момент backend приложение скуден по функционалу, чем frontend. Далее постараемся исправить эту ситуацию.
+На данный момент backend скуден по функционалу, чем frontend. Далее постараемся исправить эту ситуацию.
