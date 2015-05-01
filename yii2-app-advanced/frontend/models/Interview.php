@@ -2,27 +2,37 @@
 
 namespace frontend\models;
 
-use yii\base\Model;
+use Yii;
 
 /**
- * Class Interview
- * Модель, которая описывает форму "Опрос"
+ * This is the model class for table "interview".
  *
- *
+ * @property integer $id
+ * @property string $name
+ * @property boolean $sex
+ * @property string $planets
+ * @property string $astronauts
+ * @property integer $planet
  */
-class Interview extends Model
+class Interview extends \yii\db\ActiveRecord
 {
-    public $name;
-    public $sex;
-    public $planets;
-    public $astronauts;
-    public $planet;
     public $verifyCode;
 
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'interview';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            [['name', 'sex', 'planets', 'astronauts', 'planet', 'verifyCode'], 'required'],
+            [['name', 'sex', 'planets', 'astronauts', 'planet'], 'required'],
             ['name', 'string'],
             ['sex', 'boolean', 'message' => 'Пол выбран не верно.'],
             [
@@ -43,6 +53,9 @@ class Interview extends Model
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [
@@ -53,23 +66,5 @@ class Interview extends Model
             'planet' => 'На какую планету хотели бы полететь?',
             'verifyCode' => 'Проверочный код',
         ];
-    }
-
-    public function save(array $attributes)
-    {
-        if ($this->validate()) {
-
-            $values = $this->getAttributes($attributes);
-
-            foreach ($values as &$value) {
-                if (is_array($value)) {
-                    $value = implode(',', $value);
-                }
-            }
-
-            return \Yii::$app->db->createCommand()->insert('interview', $values)->execute();
-        }
-
-        return false;
     }
 }
