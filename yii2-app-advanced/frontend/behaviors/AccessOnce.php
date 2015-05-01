@@ -21,6 +21,8 @@ class AccessOnce extends Behavior
                 $owner::EVENT_AFTER_ACTION => 'closeDoor',
             ];
         }
+
+        return parent::events();
     }
 
     public function closeDoor(\yii\base\ActionEvent $event)

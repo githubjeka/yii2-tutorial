@@ -82,7 +82,7 @@ class SiteController extends Controller
     {
         $model = new Interview();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save(['name', 'sex', 'planets', 'astronauts', 'planet'])) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash(
                 'success',
                 'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
