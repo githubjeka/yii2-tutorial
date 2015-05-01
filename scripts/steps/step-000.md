@@ -62,7 +62,7 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlite:' . dirname(__FILE__) .'/../../sqlite.db',
+            'dsn' => 'sqlite:' . __DIR__  .'/../../sqlite.db',
         ],       
     ],
 ];
