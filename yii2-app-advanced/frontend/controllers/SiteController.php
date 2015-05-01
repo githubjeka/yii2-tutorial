@@ -12,6 +12,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use frontend\models\Interview;
 
 /**
  * Site controller
@@ -73,7 +74,7 @@ class SiteController extends Controller
 
     public function actionInterview()
     {
-        $model = new \frontend\models\Interview();
+        $model = new Interview();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
