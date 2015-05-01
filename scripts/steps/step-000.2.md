@@ -1,6 +1,6 @@
 ### Работа с формами
 
-В этом разделе рассмотрим как создать форму, как обрабатывать данные из формы.
+В этом разделе рассмотрим как создать форму.
 
 Чтобы начать, выполните команду из директории yii2-tutorial
 
@@ -57,8 +57,8 @@ public function actionContact()
 ```
 
 нужно обратиться за помощью к виджету `\yii\widgets\ActiveForm`. Наследник этого виджета - `yii\bootstrap\ActiveForm;`,
- и используется в `contact.php`. Отличия `\yii\widgets\ActiveForm` от `yii\bootstrap\ActiveForm` в том, что последний
- выводит элементы формы с учётом <a href="http://getbootstrap.com/css/#forms" target="_blank">требований Bootstrap</a>.
+и используется в `contact.php`. Отличия `\yii\widgets\ActiveForm` от `yii\bootstrap\ActiveForm` в том, что последний
+выводит элементы формы с учётом <a href="http://getbootstrap.com/css/#forms" target="_blank">требований Bootstrap</a>.
    
 На первых порах возникает вопрос - зачем использовать этот виджет и вообще php код, если можно использовать HTML. Во-первых
 использование виджета ускоряет процесс создания рутинных, обычных форм и делает легким процесс проверки пользовательских данных.
@@ -92,11 +92,17 @@ API класса ActiveForm</a>
 
 Вы наверное обратили внимание, что в каждый элемент формы передаётся переменная $model. Yii использует 
 <a href="https://ru.wikipedia.org/wiki/Model-View-Controller" target="_blank">MVC («модель-представление-контроллер»)</a>
-шаблон проектирования приложения. Вы уже знакомы с контроллерами и представлениям, так вот $model - это недостающее звено, модель.
-$model - это объект, модель которая нужна для описание сущности. В данном случае сущность - это "деловое предложение" 
-или "вопрос" от пользователя, т.е. "обратная связь". В Yii для работы с моделью реализован класс 
-<a href="http://www.yiiframework.com/doc-2.0/yii-base-model.html" target="_blank">`yii\base\Model`</a>. Объект модели
-создаётся в контроллере и передаётся в представление
+шаблон проектирования приложения. Вы уже знакомы с контроллерами и представлениям, так вот переменная `$model` - это 
+недостающее звено, класс который описывает данные и предоставляет методы для работы с этими данными.
+В данном случае, модель описывает "деловое предложение" или "вопрос" от пользователя, т.е. "обратную связь". 
+В Yii для работы с моделью реализован базовый класс <a href="http://www.yiiframework.com/doc-2.0/yii-base-model.html" target="_blank">
+yii\base\Model</a>. Этот класс предоставляет методы, которые:
+
+- помогают наполнять модель данными,
+- читать данные из модели,
+- проверять данные на корректность;
+
+Объект модели создаётся в контроллере и передаётся в представление
 
 ```php
 public function actionContact()
@@ -107,9 +113,12 @@ public function actionContact()
 }
 ```
 
-Откройте класс `ContactForm`, он находится в `yii2-app-advanced/frontend/models/`. Вообще принято все модели располагать
-в директории `application/models/`, но вы всегда можете расположить их где вам угодно с учётом <a href="http://www.php-fig.org/psr/psr-4/ru/" target="_blank">
-стандарта PSR-4</a>. И так `ContactForm` имеет:
+Откройте класс `ContactForm`, он находится в `yii2-app-advanced/frontend/models/`. 
+
+<p class="alert alert-info">
+Принято все модели располагать в директории `application/models/`, но вы всегда можете расположить их где
+угодно с учётом <a href="http://www.php-fig.org/psr/psr-4/ru/" target="_blank">стандарта PSR-4</a>.
+</p>
 
 ```php
 class ContactForm extends Model
@@ -149,8 +158,8 @@ class ContactForm extends Model
 с учётом конфигураций. Приложение определяет маршрут - контроллер и действие. Создаётся экземпляр контроллера и вызывается действие.
 В действии создаёт модель и контроллер передаёт её в вид. Далее генерируется конечный ответ, с учётом шаблонов, видов и 
 данных из моделей. Ответ отдаётся пользователю. Пользователь вводит данные и отправляет их опять в входной скрипт. Всё
-повторяется до контроллера. Теперь в контроллере опять создаётся модель, но перед отправкой её в представление,
-проверяются переданные данные: 
+повторяется до контроллера. Теперь в контроллере опять создаётся модель, но перед отправкой её в представление, она 
+наполняется данными с помощью метода `yii\base\Model->load()` и затем данные проверяются методом `yii\base\Model->validate()`: 
 
 ```php
 public function actionContact()
@@ -159,14 +168,14 @@ public function actionContact()
     if ($model->load(Yii::$app->request->post()) && $model->validate()) 
 ```
 
-Метод `$model->load` наполняет модель пользовательскими данными, которые получаются с помощью компонента request
-`Yii::$app->request->post()`. В первом уроке мы уже знакомились с одним из компонентном `db`, который служил для настройки
+Модель наполняется пользовательскими данными  с помощью компонента request `Yii::$app->request->post()`. 
+В первом уроке мы уже знакомились с одним из компонентном `db`, который служил для настройки
 базы данных. Любой компонент приложения может быть вызван как `Yii::$app->имя_компонента`. Где `Yii::$app` - это приложение, 
 которое было создано в входном файле `index.php`, а имя компонента можно установить через конфигурацию приложения.
 Компонент `request` (служит для работы с HTTP запросами 
 <a href="http://www.yiiframework.com/doc-2.0/yii-web-request.html" target="_blank">yii\web\Request</a>),
-с помощью метода `post` возвращает `$_POST` данные, которые поступают
-в метод `$model->load`. Этот метод модели соотносит её атрибуты с данными из формы, по принципу 
+с помощью метода `post` возвращает `$_POST` данные, которые поступают в метод `$model->load`. 
+Этот метод модели соотносит её атрибуты с данными из формы, по принципу 
 
 ```
 имя_модели[атрибут] = данные[имя_элемента_формы][атрибут] 
@@ -204,8 +213,8 @@ public function rules()
 имя_модели[атрибут] = данные[имя_элемента_формы][атрибут] 
 ```
 
-После `load` следует метод `$model->validate()`, который запускает вторую часть проверки данных. Метод `validate` формирует
-из результат метода `rules()` различные проверки. Делает он это по следующему принципу:
+Метод `$model->validate()`, который запускает вторую часть проверки данных, формирует из результата метода `rules()`
+различные проверки. Делает он это по следующему принципу:
 
 - перебирается каждый элемент массива:
 ```php
@@ -224,6 +233,10 @@ public function rules()
 `email` - валидатор, который проверяет правильность введённого электронного адреса.
 
 `captcha` - валидатор, который проверяет правильность введённого проверочного кода.
+
+Список встроенных валидаторов можно посмотреть в 
+<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/tutorial-core-validators.md" target="_blank">
+официальном руководстве</a> 
  
 #### Пользовательские данные не корректные.
 Если какая-нибудь проверка прошла не успешно, то атрибут модели модель `$errors` наполняется сообщениями об ошибках 
@@ -259,134 +272,184 @@ if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 ```
 
 то срабатывает метод `sendEmail` модели, который отправляет сообщение на электронный адрес администратора. Далее 
-с помощью компонента Yii::$app->session (отвечает за сессию $_SESSION пользователя, 
-<a href="http://www.yiiframework.com/doc-2.0/yii-web-session.html" target="_blank">yii\web\Session</a> формируется для 
-пользователя статус-ответ о обработке запроса в "обратную связь" и отправляется 
+с помощью компонента <a href="http://www.yiiframework.com/doc-2.0/yii-web-session.html" target="_blank">yii\web\Session</a>
+(отвечает за сессию $_SESSION пользователя) формируется статус-ответ об отправки почты. Дальше с помощью 
+`Controller->refresh()` отправляется ответ пользователю, который содержит заголовки для обновления текущей страницы.
 
 ```php
+if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+    Yii::$app->session->setFlash(
+        'success',
+        'Спасибо за ваше письмо. Мы свяжемся с вами в ближайшее время.'
+    );
+} else {
+    Yii::$app->session->setFlash('error', 'Ошибка отправки почты.');
+}
+
 return $this->refresh();
 ```
 
-ответ с заголовками, которые обновляют текущую страницу.
-
 ### Создание формы.
 
-Построим новую форму - опрос. Сначала нужно описать модель, с которой предстоит работать.
-Сформируйте для этого новый файл `Interview.php` в директории `yii2-app-advanced/frontend/models`.
-
-```php
-<?php
-namespace frontend\models;
-
-use yii\base\Model;
-
-/**
- * Class Interview
- * Модель, которая описывает форму "Опрос"
- *
- *
- */
-class Interview extends Model
-{
-
-}
-```
-
-Опишем  наши элементы формы:
+Построим новую форму - опрос пользователя. Форма будет содержать следующие элементы:
 
 - Ф.И.О.
 - Пол
-- Какие планеты солнечной системы обитаемы?
-- Какие космонавты известны?
-- На какую планету хотели бы полететь?
-- Проверочный код
+- Вопрос - какие планеты солнечной системы обитаемы?
+- Вопрос - какие космонавты известны?
+- Вопрос - на какую планету хотели бы полететь?
+- Проверочный код - каптча
+
+Форма опрос, в отличие от формы обратной связи, подразумевает под собой анализ ответов всех пользователей. Т.е нам
+понадобится сохранять в базу данных и обрабатывать пользовательские данные. Как вы помните, базовый класс 
+`yii\base\Model` позволяет:
+
+- наполнять модель данными,
+- извлекать данные из модели,
+- проверять данные на корректность;
+
+Поэтому его недостаточно для работы с базой данных. В Yii реализован популярный способ доступа к данным
+<a href="https://ru.wikipedia.org/wiki/ActiveRecord" target="_blank">Active Record</a> - класс 
+<a href="http://www.yiiframework.com/doc-2.0/yii-db-activerecord.html" target="_blank">yii\db\ActiveRecord</a>
+Этот класс наследуется от базового класса `yii\base\Model`, расширяя его до такого состояния, при котором модель 
+становится отражением строки в таблице из базы данных. Следовательно с моделью можно работать так же как со строкой в
+базе данных - искать, создавать, изменять, удалять. Следующий код иллюстрирует всю мощь и красоту реализованного шаблона
+проектирования Active Record в Yii:
 
 ```php
-class Interview extends Model
-{
-    public $name;
-    public $sex;
-    public $planets;
-    public $astronauts;
-    public $planet;
-    public $verifyCode;
-
-
-    public function attributeLabels()
-    {
-        return [
-            'name' => 'Имя',
-            'sex' => 'Пол',     
-            'planets' => 'Какие планеты обитаемы?',
-            'astronauts' => 'Какие космонавты известны?',
-            'planet' => 'На какую планету хотели бы полететь?',
-            'verifyCode' => 'Проверочный код',
-        ];
-    }
-}
+$model = new ActiveRecord;
+$model->attributes = ['text' => 'Длинный текст', 'title' => 'Заголовок'];
+$model->save();
 ```
 
+С помощью трёх строк можно наполнить модель данными, проверить данные и в случае корректности, сохранить их в базу 
+данных. Заметьте SQL не использовался, этот код сработает и для используемой нами SQLite и для любой другой СУБД.
+
+И так вернёмся к форме "Опрос". Создадим для начала таблицу в базе данных.
+
+Напомним, что для обращения к базе данных используется компонент, который мы настроили в 
+`yii2-app-advanced/common/config/main-local.php` конфигурации приложения:
+
+```php
+'db' => [
+    'class' => 'yii\db\Connection',
+    'dsn' => 'sqlite:' . __DIR__  .'/../../sqlite.db',
+],
+```
+
+и к нему можно обратиться через `\Yii::$app->db`. Познакомится с методами и свойствами компонента `db` можно в 
+<a href="http://www.yiiframework.com/doc-2.0/yii-db-connection.html" targer="_blank">API класса yii\db\Connection</a>.
+
+Для создания в базе данных таблицы, которая будет хранить данные из опросов, нам понадобится миграция. Сейчас она 
+создана, вам её осталось только применить. 
+
+Миграции создаются следующим образом:
+
+```
+yii2-tutorial\yii2-app-advanced> php yii migrate/create interview
+Yii Migration Tool (based on Yii v2.0.3)
+
+Create new migration '~/yii2-tutorial/yii2-app-advanced/console/migrations/m150428_104828_interview.php'? (yes|no) [no]:yes
+New migration created successfully.
+```
+
+В `yii2-app-advanced/console/migrations` появится файл, наподобие `m150428_104828_interview.php`, который содержит класс
+с тем же именем, что и имя файла. Этот класс содержит два метода `up()` и `down()`. Первый описывает, что происходит,
+когда миграция применяется, второй - что происходит, когда миграция аннулируется. Код принято писать так, чтобы он работал
+для любой СУБД, пусть то MySQL, PostgreSQL, SQlite или другая. Для того, чтобы писать универсальный код для всех СУБД
+в Yii реализован <a href="http://www.yiiframework.com/doc-2.0/yii-db-schema.html" targer="_blank">абстрактный класс yii\db\Schema</a>.
+Этот класс описывает схему, как хранится информация в СУБД. При создании запроса определяется на основании `dns` компонента 
+`yii\db\Connection`, какую схему нужно использовать. В свою очередь эта схема реализует работу с данными в зависимости от СУБД.
+
+Миграция для таблицы, которая будет храненить данных из формы "Опрос", выглядит следующим образом(Подробнее в в файле
+`yii2-app-advanced/console/migrations/m150428_104828_interview.php`) :
+
+```php
+$this->createTable('{{%interview}}', [
+    'id' => Schema::TYPE_PK,
+    'name' => Schema::TYPE_STRING . ' NOT NULL',
+    'sex' => Schema::TYPE_BOOLEAN . ' NOT NULL',
+    'planets' => Schema::TYPE_STRING . ' NOT NULL',
+    'astronauts' => Schema::TYPE_STRING. ' NOT NULL',
+    'planet' => Schema::TYPE_INTEGER . ' NOT NULL',
+], $tableOptions);
+```
+
+С применением миграций мы уже сталкивались, когда создавали таблицу `user`. Применим новую миграцию:
+
+```
+yii2-tutorial\yii2-app-advanced> php yii migrate
+Yii Migration Tool (based on Yii v2.0.3)
+
+Total 1 new migration to be applied:
+        m150428_104828_interview
+
+Apply the above migration? (yes|no) [no]:yes
+*** applying m150428_104828_interview
+    > create table {{%interview}} ... done (time: 0.048s)
+*** applied m150428_104828_interview (time: 0.116s)
+
+Migrated up successfully.
+```
+
+Таблица в базе данных создана. Теперь, чтобы использовать Active Record, необходимо создать модель, как отражение
+строки из СУБД. Чтобы облегчить эту задачу, в Yii есть замечательный инструмент Gii, который генерирует код.
+
 #### Gii - магический инструмент, который может написать код за вас.
-Теперь нам необходимо создать контроллер и вид. Чтобы облегчить эту задачу, в Yii есть замечательный инструмент Gii,
-который генерирует код. Gii включен в Advanced шаблоне приложения, если это приложение инициализировано в режиме отладки,
-т.е. как было ранее сделано, через 
+Gii включен в Advanced шаблоне приложения, если это приложение инициализировано в режиме отладки, т.е. как было
+ранее сделано, через 
 
 ```
 php init --env=Development
 ```
 
-Позже мы познакомимся, как создавать и использовать различные режимы работы приложения. А пока вернёмся к Gii.
-
 Чтобы попасть в Gii нужно перейти по ссылке <a href="/yii2-app-advanced/frontend/web/index.php?r=gii" target="_blank">
-index.php?r=gii</a> и выбрать пункт **Form Generator**. Form Generator предназначен для генерации кода форм. Для того, 
-чтобы форма была сгенерирована, необходимо указать:
+index.php?r=gii</a> и выбрать пункт **Model Generator**. Как можно догадаться, Model Generator предназначен
+для генерации моделей. Для того, чтобы форма была сгенерирована, необходимо указать:
 
-- имя вида (View Name) - `site/interview`
-- имя модели с учётом пространства имён - `frontend\models\Interview`
+- имя таблицы 
+- имя будущей модели `Interview`
+- пространство имени `frontend\models`
 
-Все остальные поля оставим как есть. Нажмём кнопку Preview (предпросмотр) и посмотрим `views\interview.php` будущий код:
+остальные поля оставляем как есть.
+Нажмём кнопку Preview (предпросмотр) и посмотрите `models\Interview.php` будущий код. После этого нажмите Generate.
+Всё наша модель создана и доступна по `/yii2-app-advanced/frontend/models/Interview.php`. Gii всё же не всесилен и 
+потребуется внести некоторые изменения в модель. Добавим элемент "проверочный код" - `verifyCode`, как свойство модели:
 
 ```php
-<?php
-
-use yii\helpers\Html; 
-use yii\widgets\ActiveForm; 
-
-/* @var $this yii\web\View */ 
-/* @var $model frontend\models\Interview */ 
-/* @var $form ActiveForm */ 
-?> 
-<div class="interview"> 
-
-    <?php $form = ActiveForm::begin(); ?> 
-
-     
-        <div class="form-group"> 
-            <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?> 
-        </div> 
-    <?php ActiveForm::end(); ?> 
-
-</div><!-- interview --> 
+class Interview extends Model
+{  
+    public $verifyCode;
+    
+    //...
+}
 ```
 
-Можно обратить внимание, что будут сгенерированы теги открытия и закрытия формы и кнопка для отправки формы. 
-
-А как же остальные элементы формы? Gii перед генерацией просматривает, какие атрибуты у модели являются безопасными, те и выводит.
-Так как мы не указывали правила валидации в нашей модели, то Gii посчитал все атрибуты небезопасными. Исправим это, добавив
-в модель примитивную валидацию - все поля обязательны для заполнения:
+изменим метки для будущих элементов:
 
 ```php
-public function rules()
+public function attributeLabels()
 {
     return [
-        [['name', 'sex', 'planets', 'astronauts', 'planet', 'verifyCode'], 'required']
+        'name' => 'Имя',
+        'sex' => 'Пол',
+        'planets' => 'Какие планеты обитаемы?',
+        'astronauts' => 'Какие космонавты известны?',
+        'planet' => 'На какую планету хотели бы полететь?',
+        'verifyCode' => 'Проверочный код',
     ];
 }
 ```
 
-Теперь ещё раз в Gii нажмём Preview и увидим новые элементы формы. Теперь можно нажимать Generate - создастся вид в 
-директории `views/site/interview.php` и на экране Gii предложит код действия для контроллера, который необходимо самостоятельно
-вставить в нужный контроллер. Вот чуть измененный код действия:
+И так модель формы готова, сделаем саму форму. Опять обратимся за помощью к Gii, только теперь выберем генератор
+`Form Generator`, в котором следует указать:
+
+- имя вида (View Name) - `site/interview`
+- имя модели с учётом пространства имён - `frontend\models\Interview`
+
+Все остальные поля оставим как есть. Нажмём кнопку Preview, а затем Generate - создастся вид в директории 
+`views/site/interview.php`. Также Gii предложит код действия для контроллера, который необходимо самостоятельно
+вставить в контроллер `SiteController`. Вот чуть измененный код действия:
 
 ```php
 public function actionInterview()
@@ -405,8 +468,6 @@ public function actionInterview()
     ]);
 }
 ```
-
-Вставьте код этого действия в контроллер `SiteController`.
 
 Итак модель, контроллер с действием и представление созданы, теперь можно посмотреть на результат - 
 <a href="/yii2-app-advanced/frontend/web/index.php?r=site/interview" target="_blank">index.php?r=site/interview</a>
@@ -518,220 +579,8 @@ public function actions()
 
 #### Валидация формы
 
-Модель `Interview` на данный момент использует одно правило для проверки:
-
-```php
-  [['name', 'sex', 'planets', 'astronauts', 'planet', 'verifyCode'], 'required']
-```
-
-Перед тем как добавить дополнительные проверки, создадим проверочный тест формы. В Yii2 для тестирования кода используется
-<a href="http://codeception.com/" target="_blank">codeception</a>. Чтобы установить codeception нужно в любой директории
-создать файл `composer.json` c содержимым:
-
-```json
-{
-    "require": {
-        "codeception/codeception": "*",
-        "codeception/verify": "*",
-        "codeception/specify": "*"
-    }
-}
-```
-
-и запустить из той же директории `composer install`. После автоматической установки всех зависимостей, можно запускать codeception.
-Располагается входной файл в `ваша_директория\vendor\bin\`. Но всё же лучше настроить переменную 
-<a href="https://ru.wikipedia.org/wiki/PATH_%28%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%29" targer="_blank">PATH</a>
-на эту директории, чтобы команда `codecept` была доступна из любого места.
-
-В Yii2 Advanced всё, что нужно для работы с тестами, располагается в директории `yii2-tutorial\yii2-app-advanced\tests`.
-
-Первоначальная настройка тестового окружения сводится к:
-
-- Инициализации "действующий лиц"(исполнителей тестов) codecept, через команду%
-
-```
-yii2-tutorial\yii2-app-advanced\tests\codeception\frontend> codecept build
-```
-
-Выполните её.
-
-- и к настройке тестовой базы данных (в этом уроке настройка базы данных уже произведена).
-В `yii2-tutorial\yii2-app-advanced\tests\codeception\config\config.php` меняем настройки компонента `db` на:
-
-```php
-'dsn' => 'sqlite:' . dirname(__FILE__) .'/../../sqlite-test.db',
-```
-
-И запускаем миграции для тестовой базы (вот ещё одно применение миграций):
-
-```
-yii2-tutorial/yii2-app-advanced/tests/codeception/bin> php yii migrate 
-```
- 
-Тестовая база данных нужна для того, чтобы не испортить данные на основной. Например при некоторых тестах, таблицы 
-могут быть очищены и заполнены новыми тестовыми данными.
-
-Можно попробовать запустить тесты, которые содержит Advanced шаблон. Для этого выполним:
-
-```
-yii2-tutorial\yii2-app-advanced\tests\codeception\frontend> codecept run unit
-
-//...
-
-OK (8 tests, 20 assertions)
-```
-
-8 тестов с 20 проверками выполнены успешно. `run unit` обозначает запуск юнит-тестирования.
-
-> Цель Unit тестов - изолировать отдельные части кода и показать, что по отдельности эти части работоспособны.
- 
-Добавим свой тест для формы "Опрос". Будем использовать функциональное тестирование, так как нам нужно проверить всю форму, 
-а не отдельный её части.
-
-> Функциональное тестирование — это тестирование ПО в целях проверки реализуемости функциональных требований, то есть
- способности ПО в определённых условиях решать задачи, нужные пользователям. 
- 
-Создайте в `/yii2-app-advanced/tests/codeception/frontend/functional/` файл `InterviewCept.php`:
-
-```php
-<?php
-use tests\codeception\frontend\FunctionalTester;
-
-/* @var $scenario Codeception\Scenario */
-
-$I = new FunctionalTester($scenario);
-```
-
-На человеческий язык, этот код выглядит как - "Я тестировщик функционала". `FunctionalTester` - это и есть одно из "действующий
-лиц", которые создались при первоначальной настройке Codeception, выполняя `codecept build`. Итак, у нас есть объект 
-`$I`(Я). Создадим такой тест:
-
-- Я хочу открыть страницу с формой "опроса".
-- Я хочу быть уверенным, что форма "опроса" открывается и работает.
-- Я хочу видеть ошибки при отправке пустой формы.
-- Я не хочу видеть ошибки, когда форма заполнена и отправлена.
-
-Переводим тест с человеческого языка на `codeception`. Сперва нужно описать, что такое "страница с формой опроса". 
-Создаём файл `InterviewPage.php` в `tests/codeception/frontend/_pages` c следующим содержимым:
-
-```php
-<?php
-namespace tests\codeception\frontend\_pages;
-
-use \yii\codeception\BasePage;
-
-/**
- * Описывает страницу формы "Опрос" 
- */
-class InterviewPage extends BasePage
-{
-    public $route = 'site/interview';    
-}
-```
-
-После этого в `InterviewCept.php` дописываем:
-
-```php
-<?php
-use tests\codeception\frontend\_pages\InterviewPage;
-use tests\codeception\frontend\FunctionalTester;
-
-/* @var $scenario Codeception\Scenario */
-
-$I = new FunctionalTester($scenario);
-$I->wantTo('быть уверенным, что страница с формой "опрос" работает.'); //wantTo - хочу
-$interviewPage = InterviewPage::openBy($I); // открываем страницу 'site/interview'
-$I->amGoingTo('отправить форму без данных'); //amGoingTo - собираюсь
-```
-
-Тут понадобится метод, который заполнит форму и отравит её. Создадим его в `InterviewPage`:
-
-```php
-public function submit(array $formData)
-{
-    foreach ($formData as $field => $value) {
-        if ($field === 'name' || $field === 'verifyCode') {
-            $this->actor->fillField('input[name="Interview[' . $field . ']"]', $value);
-        } elseif ($field === 'planets') {
-            foreach ($value as $val) {
-                $this->actor->checkOption('input[name="Interview[' . $field . '][]"][value=' . $val . ']');
-            }
-        } else {
-            $this->actor->selectOption('[name="Interview[' . $field . ']"]', $value);
-        }
-    }
-
-    $this->actor->click('interview-submit');
-}
-```
-
-где `$this->actor` - это `FunctionalTester`. В метод нужно передать массив значений формы `$formData`, в виде `attribute=>value`.
-Actor по attribute вычисляет, как заполнить то или иное поле. Input заполнятся через `fillField()`, checkbox через `checkOption()`,
-select и radio - `selectOption()`. Когда всё заполнено, тестировщик нажимает на кнопку отравить.`$this->actor->click('interview-submit');`.
-На данный момент кнопки с `name="interview-submit"` в виде `frontend/views/site/interview.php` нет.  Поэтому следует добавить к кнопке 
-`name`:
-
-```php
- <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'name' => 'interview-submit']) ?>
-```
-
-Дополняем тест проверками:
-
-```
-//...
-$I->amGoingTo('отправить форму без данных'); //amGoingTo - собираюсь
-
-$interviewPage->submit([]);
-
-$I->expectTo('увидеть ошибки валидации'); //expectTo - ожидаю
-$I->see('Необходимо заполнить «Имя».', '.help-block'); //see - вижу
-$I->see('Необходимо заполнить «Пол».', '.help-block');
-$I->see('Необходимо заполнить «Какие планеты обитаемы?».', '.help-block');
-$I->see('Необходимо заполнить «Какие космонавты известны?».', '.help-block');
-$I->see('Необходимо заполнить «Проверочный код».', '.help-block');
-
-$I->amGoingTo('отправить форму c корректными данными'); //amGoingTo - собираюсь
-$interviewPage->submit([
-    'name' => 'Иванов',
-    'sex' => '1',
-    'planets' => [1,2,3],
-    'astronauts' => [1,2,3],
-    'planet' => 1,
-    'verifyCode' => 'tes0tme',
-]);
-
-$I->expectTo('не увидеть ошибки валидации'); //expectTo - ожидаю
-$I->dontSee('Необходимо заполнить «Имя».', '.help-block');
-$I->dontSee('Необходимо заполнить «Пол».', '.help-block');
-$I->dontSee('Необходимо заполнить «Какие планеты обитаемы?».', '.help-block');
-$I->dontSee('Необходимо заполнить «Какие космонавты известны?».', '.help-block');
-$I->dontSee('Необходимо заполнить «Проверочный код».', '.help-block');
-```
-
-`'verifyCode' => 'testme',` - задан именно так потому, что `SiteController::captchaAction` фиксирует
-значение для каптчи, если приложение запущено в режиме тестов:
-
-```php
-'captcha' => [
-    'class' => 'yii\captcha\CaptchaAction',
-    'minLength'=>3,
-    'maxLength'=>4,
-    'height'=>40,
-    'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-],
-```
-
-Сейчас можно запустить наш тест и убедиться, что всё верно.
-В `yii2-tutorial\yii2-app-advanced\tests\codeception\frontend`:
-
-```
-codecept run functional functional/InterviewCept.php
-
-OK (1 test, 10 assertions)
-```
-
-Добавим в модели `frontend/models/Interview.php` несколько правил валидации, которые будут следить за тем, что 
-посланные данные корректные.
+Модель `Interview` на данный момент использует правила для проверки, которые Gii подобрал на основании 
+типов полей в базе данных. Перепишем в модели `frontend/models/Interview.php` некоторые правила валидации:
 
 ```php
 public function rules()
@@ -758,48 +607,6 @@ public function rules()
     ];
 }
 ```
-
-Список встроенных валидаторов можно посмотреть в 
-<a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/tutorial-core-validators.md" target="_blank">
-официальном руководстве</a>
-
-Добавим к нашему тесту пару проверок:
-
-```php
-//...
-
-$I->dontSee('Пол выбран не верно.', '.help-block');
-$I->dontSee('Выбран не корректный список планет.', '.help-block');
-$I->dontSee('Выбран не корректный список космонавтов.', '.help-block');
-$I->dontSee('Неправильный проверочный код.', '.help-block');
-
-$I->amGoingTo('отправить форму c некорректным проверочным кодом'); //amGoingTo - собираюсь
-$interviewPage = InterviewPage::openBy($I);
-$interviewPage->submit([
-    'verifyCode' => 'wrongText',
-]);
-
-$I->expectTo('увидеть ошибки валидации каптчи'); //expectTo - ожидаю
-$I->see('Неправильный проверочный код.', '.help-block');
-```
-
-```
-codecept run functional functional/InterviewCept.php
-
-OK (1 test, 15 assertions)
-```
-
-Перед отправкой некорректного проверочного кода, мы ещё раз открыли страницу `InterviewPage::openBy`, так как до этого
-мы отправляли корректные данные в контроллер `SiteController`:
-
-```php
-if ($model->validate()) {
-    // делаем что-то, если форма прошла валидацию
-    return;
-}
-```
-
-Т.е. контроллер вернул пустой ответ. И мы бы никаких элементов больше не нашли, поэтому и перегрузили страницу.
 
 #### Дополнительная информация для самостоятельного ознакомления:
 
