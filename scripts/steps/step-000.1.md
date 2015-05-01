@@ -8,7 +8,7 @@
 git checkout -f step-0.1
 ```
 
-Перейдите <a href="http://localhost:9000/yii2-app-advanced/frontend/web/index.php?r=site%2Fabout" target="_blank">
+Перейдите <a href="/yii2-app-advanced/frontend/web/index.php?r=site%2Fabout" target="_blank">
 по ссылке</a> вы попадёте на статическую страницу "About".
 
 Если посмотреть на адрес ссылки, то можно увидеть `index.php?r=site%2Fabout`.

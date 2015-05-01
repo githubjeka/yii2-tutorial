@@ -131,7 +131,7 @@ Url формируется как id контроллера и id действи
 'homeUrl' => ['/site/page', 'view'=>'duty'],
 ```
 
-- если это строка, то путь будет создан не как `.../web/index.php?r=/site/interview`, а как `http://localhost:9000/site/interview`
+- если это строка, то путь будет создан не как `.../web/index.php?r=/site/interview`, а как `http://localhost:8888/site/interview`
 
 Имя приложения и язык приложения мы настраивали `yii2-app-advanced/common/config/main.php`. Эта конфигурация располагается
 в директории `common`, что означает что конфигурация будет применена ко всем приложениями - консольному, административной 
@@ -611,10 +611,24 @@ New migration created successfully.
 В `yii2-app-advanced/console/migrations` появится файл, наподобие `m150428_104828_interview.php`, который содержит класс
 с тем же именем, что и имя файла. Этот класс содержит два метода `up()` и `down()`. Первый описывает, что происходит,
 когда миграция применяется, второй - что происходит, когда миграция аннулируется. Код принято писать так, чтобы он работал
-для любой СУБД, пусть то MySQL, PostgreSQL, sqllite или другая. Для того, чтобы писать универсальный код для всех СУБД
+для любой СУБД, пусть то MySQL, PostgreSQL, SQlite или другая. Для того, чтобы писать универсальный код для всех СУБД
 в Yii реализован <a href="http://www.yiiframework.com/doc-2.0/yii-db-schema.html" targer="_blank">абстрактный класс yii\db\Schema</a>.
 Этот класс описывает схему, как хранится информация в СУБД. При создании запроса определяется на основании `dns` компонента 
 `yii\db\Connection`, какую схему нужно использовать. В свою очередь эта схема реализует работу с данными в зависимости от СУБД.
+
+Миграция для таблицы, которая будет храненить данных из формы "Опрос", выглядит следующим образом(Подробнее в в файле
+`yii2-app-advanced/console/migrations/m150428_104828_interview.php`) :
+
+```php
+$this->createTable('{{%interview}}', [
+    'id' => Schema::TYPE_PK,
+    'name' => Schema::TYPE_STRING . ' NOT NULL',
+    'sex' => Schema::TYPE_BOOLEAN . ' NOT NULL',
+    'planets' => Schema::TYPE_STRING . ' NOT NULL',
+    'astronauts' => Schema::TYPE_STRING. ' NOT NULL',
+    'planet' => Schema::TYPE_INTEGER . ' NOT NULL',
+], $tableOptions);
+```
 
 С применением миграций мы уже сталкивались, когда создавали таблицу `user`. Применим новую миграцию:
 
@@ -639,9 +653,9 @@ Migrated up successfully.
 yii2-tutorial\yii2-app-advanced\tests\codeception\bin> php yii migrate
 ```
 
-Таблица `interview`, которая описывает нашу модель "Опрос", в базе данных создана.
+Таблица `interview`, которая описывает нашу модель "Опрос", в основной и тестовой базе данных создана.
 
-Для сохранения данных в эту таблицу  понадобятся методы `yii\db\Connection::createCommand` и `yii\db\Command::execute()`. Первый 
+Для сохранения данных в таблицу  понадобятся методы `yii\db\Connection::createCommand` и `yii\db\Command::execute()`. Первый 
 создаёт sql запрос и возвращает объект `yii\db\Command`, второй - отправляет запрос на исполнение:
 
 ```php
@@ -663,45 +677,235 @@ if ($model->load(Yii::$app->request->post())) {
 > Контроллер подвергает проверке и контролю вводные данные от пользователя и использует модель и представление для 
 реализации необходимой реакции.
 
-Нам понадобится класс помощник, который будет заниматься сохранением модели. Перед тем как создать этот класс, добавим 
-тест, который будет проверять проверку данных в базу данных.
+Создадим метод в модели `Interview`, который сохранит данные в базу данных. Затем к этому методу обратимся из контроллера.
 
 ```php
-class InterviewHelper
+public function save(array $attributes)
 {
-    public $model;
-    public $attributes;
+    if ($this->validate()) {
 
-    public function insertData()
-    {
-        if ($this->model->hasErrors() === false) {
+        $values = $this->getAttributes($attributes);
 
-            $attributes = $this->attributes;
-            $values = $this->model->getAttributes($attributes);
-
-            foreach ($values as &$value) {
-                if (is_array($value)) {
-                    $value = implode(' ', $value);
-                }
+        foreach ($values as &$value) {
+            if (is_array($value)) {
+                $value = implode(' ', $value);
             }
-
-            $attributesAsString = implode(', ', $attributes);
-            $values = array_map(
-                function ($v) {
-                    return '"' . $v . '"';
-                },
-                $values
-            );
-            $values = implode(', ', $values);
-
-            return \Yii::$app->db->createCommand(
-                "INSERT INTO interview ($attributesAsString) VALUES ($values)"
-            )->execute();
-
-        } else {
-            return false;
         }
+
+        $attributesAsString = implode(', ', $attributes);
+        $values = array_map(
+            function ($v) {
+                return '"' . $v . '"';
+            },
+            $values
+        );
+        $values = implode(', ', $values);
+
+        return \Yii::$app->db->createCommand(
+            "INSERT INTO interview ($attributesAsString) VALUES ($values)"
+        )->execute();
     }
+
+    return false;
 }
 ```
 
+Перед сохраненнием, потребуется провести валидацию данных, поэтому в метод save включена `$this->validate($attributes)`.
+Поля `planets` и `astronauts` были заданы как `Schema::TYPE_STRING`, а от пользователя эти поля приходят как массив 
+значений. С помощью php функции `implode` переделаем данные из массива в строку, как требует того 
+<a href="https://www.sqlite.org/lang_insert.html" target="_blank">SQLite insert</a>. Ну и выполним запрос через
+
+```php
+Yii::$app->db->createCommand('запрос')->execute();
+```
+
+Теперь воспользуемся этотим методом в `SiteController`:
+
+```php
+public function actionInterview()
+{
+    $model = new Interview();
+    if ($model->load(Yii::$app->request->post()) && $model->save(['name', 'sex', 'planets', 'astronauts', 'planet'])) {
+            Yii::$app->session->setFlash(
+                'success',
+                'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
+            );
+            return $this->redirect(Url::home());           
+    }
+
+    $this->detachBehaviors('accessOnce');
+
+    return $this->render('interview', ['model' => $model,]);
+}
+```
+
+Теперь данные пользователя будут сохраняться в БД. Проверим это с помощью теста. Так как необходимо проверить метод 
+`save()` внезависимости от условий, то будем использовать unit тест, вместо functional. 
+
+> Цель Unit тестов - изолировать отдельные части кода и показать, что по отдельности эти части работоспособны.
+
+Создадим в `yii2-app-advanced/tests/codeception/frontend/unit/models` файл `InterviewTest.php`
+
+```php
+<?php
+namespace tests\codeception\frontend\unit\models;
+
+use tests\codeception\frontend\unit\DbTestCase;
+use Codeception\Specify;
+
+class InterviewTest extends DbTestCase
+{
+    use Specify;
+
+    public function testSaveInterview()
+    {
+        
+    }    
+}
+```
+
+Понадобится `tests\codeception\frontend\unit\DbTestCase` и `Codeception\Specify`. Первый помогает работать с фикстурами 
+`Fixtures`. В functional тестах мы описывали страницу `InterviewPage.php` на которую заходили, а в unit нужно описать
+среду в которой будет использоваться наш тест. Т.е. в данном случае необходимо описание таблицы `Interview` в базе данных.
+
+> Автоматические тесты необходимо выполнять неоднократно. Мы хотели бы выполнять тесты в некоторых известных состояниях 
+для гарантии повторяемости процесса тестирования. Эти состояния называются фикстуры. Например, для тестирования функции 
+создания записи в приложении, каждый раз, когда мы выполняем тесты, таблицы, хранящие соответствующие данные о 
+записях, должны быть восстановлены к некоторому фиксированому состоянию.
+
+Трейт `Codeception\Specify` позволяет писать тесты в BDD стиле. 
+
+<p class="alert alert-info">
+<a href="http://en.wikipedia.org/wiki/Behavior-driven_development" target="_blank">Wiki Behavior Driven Development (BDD)</a>
+</p>
+<p class="alert alert-info">
+<a href="http://www.ibm.com/developerworks/ru/library/j-cq09187/" target="_blank">Знакомство с Behavior Driven Development (BDD)</a>
+</p>
+<p class="alert alert-info">
+<a href="https://github.com/Codeception/Specify" target="_blank">Codeception/Specify on Github</a>
+</p>
+
+Создадим фикстуру `yii2-app-advanced/tests/codeception/frontend/unit/fixtures/InterviewFixture.php`:
+
+```php
+<?php
+namespace tests\codeception\frontend\unit\fixtures;
+use yii\test\ActiveFixture;
+class InterviewFixture extends ActiveFixture
+{
+    public $tableName = 'interview';
+}
+```
+
+и подключим её в unit тесте `InterviewTest.php` через метод `fixtures()`:
+
+```php
+public function fixtures()
+{
+    return [
+        'interview' => [
+            'class' => 'tests\codeception\frontend\unit\fixtures\InterviewFixture',
+        ],
+    ];
+}
+```
+
+Всё готово опишем тест `testSaveInterview()`:
+
+```php
+public function testSaveInterview()
+{
+    $model = new \frontend\models\Interview(
+        [
+            'name' => 'Ivanov',
+            'sex' => 1,
+            'planets' => [1, 2, 3],
+            'astronauts' => [2, 3],
+            'planet' => 5,
+            'verifyCode' => 'testme',
+        ]
+    );
+
+    $model->save(['name', 'sex', 'planets', 'astronauts', 'planet']);
+
+    $modelFromDb = \Yii::$app->db->createCommand('SELECT * FROM interview WHERE name="Ivanov"')->queryOne();
+
+    $this->specify(
+        'Ответы должны быть отправлены',
+        function () use ($modelFromDb) {
+            expect('имя должно быть сохранено верно', $modelFromDb['name'])->equals('Ivanov');
+            expect('пол должен быть сохранен верно', $modelFromDb['sex'])->equals('1');
+            expect('планеты должен быть сохранены верно', $modelFromDb['planets'])->equals('1,2,3');
+            expect('космонавты должен быть сохранены верно', $modelFromDb['astronauts'])->equals('2,3');
+            expect('планета должен быть сохранена верно', $modelFromDb['planet'])->equals(5);
+        }
+    );
+}
+```
+
+В тесте первым делом создаём модель формы и через <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/concept-configurations.md" target="_blank">
+конфигурацию</a> заполняем её данными и сохраняем её с помощью метода `save()`, который проверяем. Затем с помощью
+`\yii\db\Command->queryOne()` извлекаем из базы данных одну запись и переходим к проверкам `specify()`.
+
+Когда всё готово запускаем тест из `...tests/codeception/frontend`:
+
+```php
+codecept run unit /unit/models/InterviewTest.php
+
+OK (1 test, 5 assertions)
+```
+
+Каждый раз при запуске этого теста, с помощью фикстур состояние таблицы `$tableName = 'interview'` будет сброшено, т.е.
+все данные, которые в ней хранятся будут удалены. Позже мы рассмотрим как применить фикстуру, для сброса таблицы,
+но при этом заполнить её определёнными данными. 
+
+А пока проверим наш предыдущий функциональный тест, чтобы убедиться, что ничего не поломалось:
+
+```php
+codecept run functional /functional/InterviewCept.php
+
+OK (1 test, 17 assertions)
+```
+
+Теперь каждый раз при внесении изменений в код, нам нет необходимости запускать браузер, заполнять форму выдуманными данными и 
+проверять работает ли та или иная функциональность. Теперь вы сможете проделать всё это за считанные секунды.
+
+Напоследок вернёмся к методу `save()`. В нём мы использовали `array_map` и `implode`, так как подстраивались под 
+требования SQLlite, что не совсем правильно. Ведь можно использовать MySQL или другую базу данных, которая 
+будет требовать совершенно другого синтаксиса команды INSERT. Yii приходит на помощь. Для вставки данных можно 
+воспользоваться методом `insert()` из <a href="http://www.yiiframework.com/doc-2.0/yii-db-command.html" target="_blank">yii\db\Command</a>
+, который подберёт нужный синтаксис для вставки данных, а также обезопасит от 
+<a href="https://ru.wikipedia.org/wiki/%D0%92%D0%BD%D0%B5%D0%B4%D1%80%D0%B5%D0%BD%D0%B8%D0%B5_SQL-%D0%BA%D0%BE%D0%B4%D0%B0">
+SQL инъекции</a>. Ведь в `$values` может быть чем угодно.
+
+```php
+"INSERT INTO interview ($attributesAsString) VALUES ($values)"
+```
+
+Метод `save()` стоит переписать:
+
+```php
+public function save(array $attributes)
+{
+    if ($this->validate()) {
+        $values = $this->getAttributes($attributes);
+        foreach ($values as &$value) {
+            if (is_array($value)) {
+                $value = implode(',', $value);
+            }
+        }
+        return \Yii::$app->db->createCommand()->insert('interview', $values)->execute();
+    }
+    return false;
+}
+```
+
+`implode` пришлось оставить, чтобы значения, которые поступили в виде массива были преобразованы в строки. Но всё же код
+получился лаконичнее и безопаснее.
+
+Запустите самостоятельно тесты, чтобы убедиться, что всё работает также.
+
+#### Дополнительная информация для самостоятельного ознакомления:
+
+- Ознакомьтесь более подробно с возможностями <a href="http://codeception.com/" target="_blank">Codeception</a>.
+- Освежите знания о <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/concept-components.md" target="_blank">компонетам Yii</a>.

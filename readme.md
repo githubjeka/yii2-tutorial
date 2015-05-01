@@ -36,6 +36,6 @@ Zend Engine v2.6.0, Copyright (c) 1998-2014 Zend Technologies
 ```
 git clone "https://github.com/githubjeka/yii2-tutorial"
 cd yii2-tutorial
-php -S localhost:9000
+php -S localhost:8888
 ```
-и перейдите по адресу [http://localhost:9000/scripts/](http://localhost:9000/scripts/)
+и перейдите по адресу [http://localhost:8888/scripts/](http://localhost:8888/scripts/)
