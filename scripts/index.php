@@ -1,6 +1,6 @@
 <?php
 if (basename($_SERVER['DOCUMENT_ROOT']) !== 'yii2-tutorial') {
-    exit('Сервер PHP запущен не из той директории. Выполните "php -S localhost:9000" из "yii2-tutorial"');
+    exit('Сервер PHP запущен не из той директории. Выполните "php -S localhost:8888" из "yii2-tutorial"');
 }
 
 $steps = [

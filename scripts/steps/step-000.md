@@ -10,7 +10,7 @@
 </p>
 
 Все статичные страницы нашего приложения не требуют каких-либо данных. А вот страница `Signup`(регистрация пользователей)
-требует подключения к базе данных. Если на <a href="http://localhost:9000/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">
+требует подключения к базе данных. Если на <a href="/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">
 этой странице</a> ввести в поля какие-либо данные и нажать кнопку "Signup", то скорее всего увидите ошибку `Database Exception...`.
 
 Сейчас наш сайт пытается подключится к базе данных `yii2advanced` MySQL. Yii не ограничивает вас в выборе базы данных, вы
@@ -105,7 +105,7 @@ Migrated up successfully.
  
 Теперь в `yii2-app-advanced` можно обнаружить файл `sqlite.db` - это и есть наша база данных. 
 
-Ну что ж, вернёмся на <a href="http://localhost:9000/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">Signup</a>
+Ну что ж, вернёмся на <a href="/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">Signup</a>
 и попробуем ввести регистрационные данные: `Username` - `admin`, `Email` - `admin@local.net`, `Password` - `123456`.
 После отправки данных, случится переход на главную страницу с последующей аутентификацией пользователя `admin`. Сейчас 
 мы находимся в пользовательском приложении (frontend). Шаблон `Advanced` также реализует административное приложение(backend).
