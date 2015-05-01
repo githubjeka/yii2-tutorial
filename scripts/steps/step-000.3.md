@@ -493,7 +493,7 @@ EVENT_AFTER_ACTION будет срабатывать, только когда с
 #### Осталось сохранить данные.
 
 Таблицу `interview` в базе данных, которая описывает нашу модель `frontend/models/Interview`, мы создали ранее.
-Напомним, также что используем шаблон проектирования Active Record. Модель `Interview` наследует всё функциональность
+Напомним, что использовали шаблон проектирования Active Record. Модель `Interview` наследует всю функциональность
 из <a href="http://www.yiiframework.com/doc-2.0/yii-db-activerecord.html" target="_blank">yii\db\ActiveRecord</a>,
 поэтому трудностей с сохранением не должно возникнуть. Нужно использовать лишь один метод `save()`, который также 
 включает в себя валидацию данных. Т.е. метод `$model->validate()` мы можем заменить на `$model->save()` в контроллере
@@ -520,5 +520,9 @@ public function actionInterview()
 
 #### Дополнительная информация для самостоятельного ознакомления:
 
-- Освежите знания о <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/concept-components.md" target="_blank">компонентах Yii</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/structure-models.md" target="_blank">Модели</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/start-databases.md" target="_blank">Работа с базами данных</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/concept-components.md" target="_blank">Компоненты</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/runtime-sessions-cookies.md" target="_blank">Сессии и куки</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/runtime-routing.md" target="_blank">Работа с URL</a>.
 
