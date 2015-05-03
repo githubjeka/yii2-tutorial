@@ -495,9 +495,9 @@ EVENT_AFTER_ACTION будет срабатывать, только когда с
 Таблицу `interview` в базе данных, которая описывает нашу модель `frontend/models/Interview`, мы создали ранее.
 Напомним, что использовали шаблон проектирования Active Record. Модель `Interview` наследует всю функциональность
 из <a href="http://www.yiiframework.com/doc-2.0/yii-db-activerecord.html" target="_blank">yii\db\ActiveRecord</a>,
-поэтому трудностей с сохранением не должно возникнуть. Нужно использовать лишь один метод `save()`, который также 
-включает в себя валидацию данных. Т.е. метод `$model->validate()` мы можем заменить на `$model->save()` в контроллере
-`SiteController`.
+поэтому трудностей с сохранением не должно возникнуть. Нужно использовать лишь один метод `save($runValidation == true)`, 
+который также включает в себя валидацию данных. Т.е. метод `$model->validate()` мы можем заменить на `$model->save()` 
+в контроллере `SiteController`.
 
 ```php
 public function actionInterview()
@@ -515,6 +515,33 @@ public function actionInterview()
     $this->detachBehaviors('accessOnce');
 
     return $this->render('interview', ['model' => $model,]);
+}
+```
+
+Метод `save($runValidation)` подразумевает под собой следующий сценарий:
+
+1. вызывается `beforeValidate()`, если `$runValidation = true`. Если `$runValidation = false` этот и последующий шаги
+ игнорируется.
+2. вызывается `afterValidate()`.
+3. вызывается `beforeSave()`. Если метод возвращает false, то процесс прерывается и дальнейшие шаги не выполняются.
+4. происходит сохранение данных в базу данных
+5. вызывается `afterSave()`;
+
+В нашем случае есть один нюанс - например, на вопрос "Какие космонавты вам известны?", пользователь может выбрать несколько
+вариантов. Следовательно данные поступят в модель в виде массива значений, а в базе это поле хранится в виде строки.
+Получается необходимо преобразовать массив данных в строку для последующего сохранения. Сделаем это с помощью 
+переопределения метода `beforeSave()` в модели Interview:
+
+```php
+public function beforeSave($insert)
+{
+    if (parent::beforeSave($insert)) {
+        $this->planets = implode(',', $this->planets);
+        $this->astronauts = implode(',', $this->astronauts);
+        return true;
+    }
+
+    return false;
 }
 ```
 
