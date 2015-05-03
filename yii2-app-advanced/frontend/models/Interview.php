@@ -67,4 +67,15 @@ class Interview extends \yii\db\ActiveRecord // \yii\db\ActiveRecord измен�
             'verifyCode' => 'Проверочный код',
         ];
     }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->planets = implode(',', $this->planets);
+            $this->astronauts = implode(',', $this->astronauts);
+            return true;
+        }
+
+        return false;
+    }
 }
