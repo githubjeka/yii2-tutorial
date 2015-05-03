@@ -44,7 +44,7 @@ use yii\bootstrap\ActiveForm;
                 [
                     'template' => '<div class="row"><div class="col-xs-3">{image}</div><div class="col-xs-4">{input}</div></div>',
                 ]
-            )->hint('Нажмите на картинку, чтобы обновить.') ?>
+            )->hint('Нажмите на картинку, чтобы обновить.')->label('Проверочный код') ?>
 
             <div class="form-group">
                 <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'name' => 'interview-submit']) ?>

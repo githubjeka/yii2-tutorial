@@ -14,17 +14,9 @@ use Yii;
  * @property string $astronauts
  * @property integer $planet
  */
-class Interview extends \yii\db\ActiveRecord // \yii\db\ActiveRecord измените на \common\models\Interview
+class Interview extends \common\models\Interview
 {
     public $verifyCode;
-
-    /**
-     * @inheritdoc
-     */
-    public static function tableName() // можно удалить, т.к. наследуется из common части
-    {
-        return 'interview';
-    }
 
     /**
      * @inheritdoc
@@ -49,22 +41,7 @@ class Interview extends \yii\db\ActiveRecord // \yii\db\ActiveRecord измен�
                 'message' => 'Выбран не корректный список космонавтов.',
                 'allowArray' => 1
             ],
-            ['verifyCode', 'captcha'],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels() // можно удалить, т.к. наследуется из common части
-    {
-        return [
-            'name' => 'Имя',
-            'sex' => 'Пол',
-            'planets' => 'Какие планеты обитаемы?',
-            'astronauts' => 'Какие космонавты известны?',
-            'planet' => 'На какую планету хотели бы полететь?',
-            'verifyCode' => 'Проверочный код',
+            ['verifyCode', 'captcha', 'message' => 'Проверочный код введён не верно.',],
         ];
     }
 
