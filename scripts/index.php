@@ -1,8 +1,4 @@
 <?php
-if (basename($_SERVER['DOCUMENT_ROOT']) !== 'yii2-tutorial') {
-    exit('Сервер PHP запущен не из той директории. Выполните "php -S localhost:9000" из "yii2-tutorial"');
-}
-
 $steps = [
     'main' => [
         'title' => 'Учебник',
@@ -10,7 +6,7 @@ $steps = [
     ],
     'step-0' => [
         'title' => 'Знакомимся с приложением',
-        'file' => 'step-000.md',
+        'file' => 'step-000.0.md',
     ],
     'step-0.1' => [
         'title' => 'Виды и шаблоны',
@@ -20,9 +16,21 @@ $steps = [
         'title' => 'Формы',
         'file' => 'step-000.2.md',
     ],
-    'step-1' => [
+    'step-0.3' => [
         'title' => 'Обработка формы',
         'file' => 'step-000.3.md',
+    ],
+    'step-0.4' => [
+        'title' => 'Административное приложение Backend',
+        'file' => 'step-000.4.md',
+    ],
+    'step-1' => [
+        'title' => 'Знакомство с тестированием',
+        'file' => 'step-001.0.md',
+    ],
+    'step-1.1' => [
+        'title' => 'Работа с реляционными данными',
+        'file' => 'step-001.1md',
     ],
 ];
 
@@ -45,6 +53,12 @@ $parser = new \cebe\markdown\GithubMarkdown();
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/readable/bootstrap.min.css">
 </head>
 <body class="container">
+
+<?php
+if (basename($_SERVER['DOCUMENT_ROOT']) !== 'yii2-tutorial') {
+    exit('Сервер PHP запущен не из той директории. Выполните "php -S localhost:8888" из "yii2-tutorial"');
+}
+?>
 
 <div class="row">
 
