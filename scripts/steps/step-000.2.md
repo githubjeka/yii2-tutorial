@@ -417,7 +417,7 @@ index.php?r=gii</a> и выбрать пункт **Model Generator**. Как м�
 потребуется внести некоторые изменения в модель. Добавим элемент "проверочный код" - `verifyCode`, как свойство модели:
 
 ```php
-class Interview extends Model
+class Interview extends \yii\db\ActiveRecord
 {  
     public $verifyCode;
     
