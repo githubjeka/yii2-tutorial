@@ -36,6 +36,9 @@ git checkout -f step-1.0
 
 <p class="alert alert-info">Под Windows вместо стандартной командной строки cmd лучше использовать другой интерпретатор.
 Тот который использует подсветку кода, например <a href="http://gooseberrycreative.com/cmder/" target="_blank">Cmder</a>
+
+<a href="http://stackoverflow.com/questions/388490/unicode-characters-in-windows-command-line-how/388500#388500" target="_blank">
+Решение проблемы с кодировкой в Windows</a>
 </p>
 
 #### Codeception
