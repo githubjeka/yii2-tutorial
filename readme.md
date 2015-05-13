@@ -1,9 +1,11 @@
 #Интерактивное руководство создания сайта на Yii2 на русском языке
 
+
+
 ## Содержание
 
 1. Начальная установка
-2. Знакомство с Advanced
+2. Знакомство с Advanced [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0)](https://travis-ci.org/githubjeka/yii2-tutorial)
 3. Виды и шаблоны
 4. Формы, Active Record, Gii, Валидация.
 5. Сессия. События и поведения. Сохранение данных.
