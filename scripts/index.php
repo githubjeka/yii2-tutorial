@@ -51,6 +51,7 @@ $parser = new \cebe\markdown\GithubMarkdown();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Учебник по Yii2: <?= $step['title'] ?></title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/readable/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/default.min.css">
 </head>
 <body class="container">
 
@@ -82,6 +83,8 @@ if (basename($_SERVER['DOCUMENT_ROOT']) !== 'yii2-tutorial') {
 
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 
 </html>

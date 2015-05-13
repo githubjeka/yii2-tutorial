@@ -34,5 +34,15 @@ git clone "https://github.com/githubjeka/yii2-tutorial"
 cd yii2-tutorial
 php -S localhost:8888
 ```
-
 и перейдите по адресу [http://localhost:8888/scripts/](http://localhost:8888/scripts/)
+
+### Лицензия & Авторские права
+
+Весь материал (с) 2015 Evgeniy Tkachenko (<et.coder@gmail.com>)
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.ru">
+<img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" />
+</a>
+
+"Интерактивное руководство создания сайта на Yii2 на русском языке" распространятся под 
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.ru">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.</a>
