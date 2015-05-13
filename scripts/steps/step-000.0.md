@@ -76,10 +76,21 @@ return [
 ];
 ```
 В нашем и предыдущем случае за соединение с базой данной отвечает класс `yii\db\Connection`.
+
 <p class="alert alert-info">Рекомендуется ознакомится с <a href="http://www.yiiframework.com/doc-2.0/yii-db-connection.html" target="_blank">
 API класса Connection</a>
 </p>
-Для соединения нужно указать DSN, в нашем случае это путь к файлу - `/yii2-app-advanced/sqlite.db`.     
+
+Для соединения нужно указать DSN, в нашем случае это путь к файлу - `/yii2-app-advanced/sqlite.db`. Для остальных, наподобие:
+
+```
+'dsn' => 'pgsql:host=localhost;port=5432;dbname=mydatabase', // PostgreSQL
+'dsn' => 'cubrid:dbname=demodb;host=localhost;port=33000', // CUBRID
+'dsn' => 'sqlsrv:Server=localhost;Database=mydatabase', // MS SQL Server, sqlsrv
+'dsn' => 'dblib:host=localhost;dbname=mydatabase', // MS SQL Server, dblib driver
+'dsn' => 'mssql:host=localhost;dbname=mydatabase', // MS SQL Server, mssql driver
+'dsn' => 'oci:dbname=//localhost:1521/mydatabase', // Oracle
+```
 
 > Имя источника данных (DSN) - это логическое имя, которое используется ODBC (Open Database Connectivity), чтобы 
 > обращаться к диску и другой информации, необходимой для доступа к данным.
