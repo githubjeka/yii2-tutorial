@@ -12,10 +12,10 @@ cache:
 
 install:
  - cd yii2-app-advanced
+# composer
  - travis_retry composer self-update && composer --version
  - travis_retry composer global require "fxp/composer-asset-plugin:~1.0.0"
  - export PATH="$HOME/.composer/vendor/bin:$PATH"
- - travis_retry composer install --dev --prefer-dist --no-interaction
 # codeception
  - travis_retry composer global require "codeception/codeception=2.0.*" "codeception/specify=*" "codeception/verify=*"
 # setup application:
