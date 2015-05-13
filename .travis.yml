@@ -23,7 +23,7 @@ install:
    cd tests/codeception/common && codecept build
    cd ../backend && codecept build
    cd ../console && codecept build
-   cd ../rest && codecept build
+   cd ../frontend && codecept build
    cd ../../../
 before_script:
   - cd tests/codeception/bin && php yii migrate --interactive=0 && cd ../../../..
