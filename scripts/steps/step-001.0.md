@@ -35,7 +35,8 @@ git checkout -f step-1.0
 
 
 <p class="alert alert-info">Под Windows вместо стандартной командной строки cmd лучше использовать другой интерпретатор.
-Тот который использует подсветку кода, например <a href="http://gooseberrycreative.com/cmder/" target="_blank">Cmder</a>
+Тот который использует подсветку кода, например <a href="http://gooseberrycreative.com/cmder/" target="_blank">Cmder</a>.
+Если у вас возникли проблемы с кодировкой в командной строке, то попробуйте выполнить в ней команду "cp 65001".
 </p>
 
 #### Codeception

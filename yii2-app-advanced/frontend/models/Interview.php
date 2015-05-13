@@ -41,7 +41,7 @@ class Interview extends \common\models\Interview
                 'message' => 'Выбран не корректный список космонавтов.',
                 'allowArray' => 1
             ],
-            ['verifyCode', 'captcha', 'message' => 'Проверочный код введён не верно.',],
+            ['verifyCode', 'captcha', 'message' => 'Проверочный код введён неверно.',],
         ];
     }
 
