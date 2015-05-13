@@ -3,7 +3,10 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlite:' . __DIR__  .'/../../sqlite.db',
+            'dsn' => 'sqlite:' . __DIR__ . '/../../sqlite.db',
+            'on ' . yii\db\Connection::EVENT_AFTER_OPEN => function ($event) {
+                $event->sender->createCommand('PRAGMA foreign_keys = ON;')->execute();
+            }
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
