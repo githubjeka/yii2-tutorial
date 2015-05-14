@@ -3,12 +3,13 @@
 ## Содержание
 
 1. Начальная установка
-2. Знакомство с Advanced
-3. Виды и шаблоны
+2. Знакомство с Advanced [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0)](https://travis-ci.org/githubjeka/yii2-tutorial)
+3. Виды и шаблоны [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.1)](https://travis-ci.org/githubjeka/yii2-tutorial)
 4. Формы, Active Record, Gii, Валидация.
 5. Сессия. События и поведения. Сохранение данных.
 6. Backend. GridView. Авторизация.
 7. Знакомство с тестированием.
+8. Работа с реляционными данными.
 
 ##Запуск
 Для запуска понадобится Git и PHP.
