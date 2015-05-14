@@ -65,8 +65,8 @@ public function actionContact()
  
 В `contact.php`
 
-```
-<?php $form = ActiveForm::begin(['id' => 'contact-form', 'enableClientValidation' => 'false']); ?>
+```php
+<?php $form = ActiveForm::begin(['id' => 'contact-form', 'enableClientValidation' => false]); ?>
     <?= $form->field($model, 'name') ?>
     <?= $form->field($model, 'email') ?>
     <?= $form->field($model, 'subject') ?>
