@@ -13,7 +13,7 @@ return [
     ],
     'components' => [
         'db' => [
-            'dsn' => 'sqlite:' . dirname(__FILE__) .'/../../sqlite-test.db',
+            'dsn' => 'sqlite:' . __DIR__  .'/../../sqlite.db',
         ],
         'mailer' => [
             'useFileTransport' => true,
