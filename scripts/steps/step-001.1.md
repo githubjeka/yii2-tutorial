@@ -328,6 +328,35 @@ Time: 519 ms, Memory: 21.00Mb
 OK (1 test, 3 assertions)
 ```
 
+Благодаря Gii мы получили, с минимальными усилиями, базовый интерфейс для работы с тремя моделями. Теперь можно 
+перейти на страницы управления: <a href="/yii2-app-advanced/backend/web/index.php?r=star" target="_blank">звёздами,</a> 
+<a href="/yii2-app-advanced/backend/web/index.php?r=planet" target="_blank">планетами</a>
+и <a href="/yii2-app-advanced/backend/web/index.php?r=satellite" target="_blank">спутниками</a>. 
+
+Давайте внесём некоторую красоту в наш интерфейс - добавим пункты в верхнее меню, для быстрого доступа к моделям. 
+Такое мы уже выполняли, когда знакомились с видами и шаблонами.
+
+В файле `yii2-app-advanced/backend/views/layouts/main.php` подправим переменную `$menuItems`:
+
+```php
+$menuItems = [
+    ['label' => 'Home', 'url' => ['/site/index']],
+];
+if (Yii::$app->user->isGuest) {
+    $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+} else {
+    $menuItems[] = [
+        'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+        'url' => ['/site/logout'],
+        'linkOptions' => ['data-method' => 'post']
+    ];
+}
+```
+
+
+
+
+
 #### Дополнительная информация для самостоятельного ознакомления:
 
 - <a href="#" target="_blank">Официальное руководство по работе с связями в AR</a>.
