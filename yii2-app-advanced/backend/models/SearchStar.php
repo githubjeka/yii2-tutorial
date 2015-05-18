@@ -12,13 +12,15 @@ use common\models\Star;
  */
 class SearchStar extends Star
 {
+    public $countPlanets;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'countPlanets'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -41,23 +43,42 @@ class SearchStar extends Star
      */
     public function search($params)
     {
-        $query = Star::find();
+        $query = Star::find()
+            ->select([$this->tableName() . '.*', 'count(star_id) as countPlanets'])
+            ->joinWith('planets')
+            ->groupBy($this->tableName() . '.id');;
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $dataProvider = new ActiveDataProvider(
+            [
+                'query' => $query,
+                'sort' => [
+                    'attributes' => [
+                        'id',
+                        'name',
+                        'countPlanets' => [
+                            'asc' => ['countPlanets' => SORT_ASC,],
+                            'desc' => ['countPlanets' => SORT_DESC,],
+                        ],
+                    ]
+                ]
+            ]
+        );
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'id' => $this->id,
-        ]);
+        if ($this->countPlanets) {
+            $query->having(['countPlanets' => (int)$this->countPlanets]);
+        }
+
+        $query->andFilterWhere(
+            [
+                $this->tableName() . 'id' => $this->id,
+            ]
+        );
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 

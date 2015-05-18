@@ -42,8 +42,8 @@ class Satellite extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'planet_id' => 'Planet ID',
+            'name' => 'Наименование',
+            'planet_id' => 'ID планеты',
         ];
     }
 
