@@ -47,6 +47,8 @@ return [
 руководстве</a>
 </p>
 
+TODO: https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/security-authentication.md
+
 Теперь давайте вернёмся к форме "Опрос". Для работы с формой в клиентской части(далее frontend) мы использовали 
 Active Record модель `Interview`, которая описывала форму. Т.к. эта модель описана в frontend, то в backend
 она не доступна. Чтобы исправить это, необходимо модель расположить в общей директории - `common/models/`. 
