@@ -123,19 +123,24 @@ Url формируется как id контроллера и id действи
 по этому адресу используем метод контроллера `redirect()`
 
 ```php
-public function actionInterview()
+use yii\helpers\Url;
+
+class SiteController extends Controller
 {
-    $model = new Interview();
-    if ($model->load(Yii::$app->request->post())) {
-        if ($model->validate()) {
-            Yii::$app->session->setFlash(
-                'success',
-                'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
-            );
-            return $this->redirect(Url::home());
-        }
-    }    
-    return $this->render('interview', ['model' => $model,]);
+    public function actionInterview()
+    {
+        $model = new Interview();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                Yii::$app->session->setFlash(
+                    'success',
+                    'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
+                );
+                return $this->redirect(Url::home());
+            }
+        }    
+        return $this->render('interview', ['model' => $model,]);
+    }
 }
 ```
 
