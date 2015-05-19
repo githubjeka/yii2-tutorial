@@ -251,7 +251,7 @@ if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
 <img src="/scripts/assets/screen0.2-1.jpg" class="img-responsive">
 
-По-умолчанию в виджете `ActiveForm` включено свойство `$enableClientValidation`, которое означает, что проверки выполняются
+По умолчанию в виджете `ActiveForm` включено свойство `$enableClientValidation`, которое означает, что проверки выполняются
 с помощью javascript кода прямо в браузере, а не отправляются на сервер. В нашем примере оно отключено, включите его
 при создании ActiveForm:
 
@@ -481,7 +481,7 @@ public function actionInterview()
 <img src="/scripts/assets/screen0.2-4.jpg" class="img-responsive">
 
 - Вид элемента `name` остаётся неизменным.
-- Вид элемента `sex` необходимо переделать на два переключателя. По-умолчанию `$form->field()` генерирует текстовый 
+- Вид элемента `sex` необходимо переделать на два переключателя. По умолчанию `$form->field()` генерирует текстовый 
 `<input type="text">`. Это можно изменить следующим образом:
 ```php
    <?= $form->field($model, 'sex')->radioList(['Мужчина', 'Женщина']) ?>
@@ -568,7 +568,7 @@ public function actions()
 ```
 <p class="alert alert-info">
 Когда формируется элемент капчта, то для получения изображения виджет <a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captcha.html" target="_blank">yii\captcha\Captcha</a>,
-по-умолчанию, посылает запрос на `site/captcha`. Действие <a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captchaaction.html" target="_blank">yii\captcha\CaptchaAction</a> 
+по умолчанию, посылает запрос на `site/captcha`. Действие <a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captchaaction.html" target="_blank">yii\captcha\CaptchaAction</a> 
 возвращает изображение каптчи и при этом сохраняет в сессию пользователя проверочный код, для последующей валидации.
 </p>
 
