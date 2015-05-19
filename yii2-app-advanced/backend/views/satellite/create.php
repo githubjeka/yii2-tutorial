@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Satellite */
 
-$this->title = 'Create Satellite';
-$this->params['breadcrumbs'][] = ['label' => 'Satellites', 'url' => ['index']];
+$this->title = 'Создание спутника';
+$this->params['breadcrumbs'][] = ['label' => 'Спутники', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="satellite-create">

@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Star */
 
-$this->title = 'Create Star';
-$this->params['breadcrumbs'][] = ['label' => 'Stars', 'url' => ['index']];
+$this->title = 'Создание звезды';
+$this->params['breadcrumbs'][] = ['label' => 'Звёзды', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="star-create">
