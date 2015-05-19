@@ -404,8 +404,36 @@ php init --env=Development
 ```
 
 Чтобы попасть в Gii нужно перейти по ссылке <a href="/yii2-app-advanced/frontend/web/index.php?r=gii" target="_blank">
-index.php?r=gii</a> и выбрать пункт **Model Generator**. Как можно догадаться, Model Generator предназначен
-для генерации моделей. Для того, чтобы форма была сгенерирована, необходимо указать:
+index.php?r=gii</a> и выбрать пункт **Model Generator**.
+ 
+Если ваш сайт установлен не на локальном хосте, то скорее всего вы увидите на странице Gii ошибку доступа 403.
+
+> Forbidden (#403) You are not allowed to access this page.
+
+<a href="http://www.yiiframework.com/doc-2.0/yii-gii-module.html#$allowedIPs-detail" target="_blank">Доступ по умолчанию</a>
+разрешён только для `['127.0.0.1', '::1'];` IP адресов. Настраивается свойство `$allowedIPs` для Gii через конфигурационные
+файлы в директории `config`. Настройки доступа, в зависимости от окружения, на котором запущен сайт, могут изменяться.
+Поэтому такие настройки принято хранить не в `main.php`, а в `main-local.php`. Откройте `yii2-app-advanced/frontend/config/main-local.php` и 
+измените строку:
+
+```php
+$config['modules']['gii'] = 'yii\gii\Module';
+```
+
+на 
+
+```php
+$config['modules']['gii'] = [
+    'class' => 'yii\gii\Module',
+    'allowedIPs' => ['192.168.0.*']
+];
+```
+
+Теперь на страницу <a href="/yii2-app-advanced/frontend/web/index.php?r=gii" target="_blank">index.php?r=gii</a> разрешено
+будет заходить только с тех устройств, которые находятся в подсети 192.168.0.0/24
+
+Вернёмся к Model Generator. Этот раздел Gii предназначен для генерации моделей. Для того, чтобы форма была сгенерирована, 
+необходимо указать:
 
 - имя таблицы 
 - имя будущей модели `Interview`
