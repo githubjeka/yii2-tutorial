@@ -50,6 +50,26 @@ cd yii2-tutorial
 git remote update
 ```
 
+Далее нужно обратить внимание на ветки git, которые имеют изменения и выполнить для них команды. Например для `master`:
+
+```
+git remote update                                         
+    Fetching origin                                             
+    remote: Counting objects: 3, done.                          
+    remote: Compressing objects: 100% (3/3), done.              
+    remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+    Unpacking objects: 100% (3/3), done.                        
+    From https://github.com/githubjeka/yii2-tutorial            
+       8d08bb3..537ddc6  master     -> origin/master  
+                                                            
+\yii2-tutorial (master)                          
+git pull                                                  
+    Updating 8d08bb3..537ddc6                                   
+    Fast-forward                                                
+     readme.md | 15 ++++++++++++++-                             
+     1 file changed, 14 insertions(+), 1 deletion(-)            
+```
+
 ### Лицензия & Авторские права
 
 Весь материал (с) 2015 Evgeniy Tkachenko (<et.coder@gmail.com>)
