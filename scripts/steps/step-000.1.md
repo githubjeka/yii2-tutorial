@@ -18,7 +18,7 @@ git checkout -f step-0.1
 а `about` в метод `function actionAbout() {...}` и вызывает его на исполнение.
 
 Найдём этот контроллер и этот метод. Контроллер лежит в `yii2-app-advanced/frontend/controllers/SiteController.php`, 
-по-умолчанию все контроллеры принято располагать в папке `controllers/` c суффиксом `Controller` 
+по умолчанию все контроллеры принято располагать в папке `controllers/` c суффиксом `Controller` 
 (<a href="https://github.com/yiisoft/yii2/issues/2709" target="_blank">Почему так?</a>).
 
 <p class="alert alert-info">Подробнее о контроллерах и действиях в 
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 В общем, обычно всё находится в директории `yii2-app-advanced/frontend/views/layouts` в файле `main.php`. Иногда разработчики
 приложения изменяют эту ситуацию, настраивая конфигурацию `yii\web\Application` или `SiteController` на своё усмотрение.
-Yii никого в этом не ограничивает. В данный момент, ограничимся тем, что имеем по-умолчанию.
+Yii никого в этом не ограничивает. В данный момент, ограничимся тем, что имеем по умолчанию.
 
 Итак, откройте `yii2-app-advanced/frontend/views/layout/main.php` и ознакомьтесь с содержимым. Это шаблон, который
 подключается к каждому виду. Т.е. по сути это главная HTML разметка для всех страниц приложения. Виджет меню имеет вид
@@ -213,7 +213,7 @@ API класса ViewAction</a> и перечитать про <a href="https://
 ],
 ```
 
-По-умолчанию в Advanced этого кода нет, он добавлен для вашего удобства.
+По умолчанию в Advanced этого кода нет, он добавлен для вашего удобства.
 Теперь нужно перейти по адресу 
 <a href="/yii2-app-advanced/frontend/web/index.php?r=site/page&view=about" target="_blank">
 index.php?r=site/page&view=about
