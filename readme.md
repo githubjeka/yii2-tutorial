@@ -1,13 +1,11 @@
 #Интерактивное руководство создания сайта на Yii2 на русском языке
 
-
-
 ## Содержание
 
 1. Начальная установка
 2. Знакомство с Advanced [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0)](https://travis-ci.org/githubjeka/yii2-tutorial)
-3. Виды и шаблоны
-4. Формы, Active Record, Gii, Валидация.
+3. Виды и шаблоны [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.1)](https://travis-ci.org/githubjeka/yii2-tutorial)
+4. Формы, Active Record, Gii, Валидация. [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.2)](https://travis-ci.org/githubjeka/yii2-tutorial)
 5. Сессия. События и поведения. Сохранение данных.
 6. Backend. GridView. Авторизация.
 7. Знакомство с тестированием.
@@ -30,6 +28,8 @@
 Если у вас возникли сложности с установкой инструментов, то обратитесь на 
 [форум за помощью](http://yiiframework.ru/forum/viewforum.php?f=17&sid=7d16a10cc45601f77dfd89c094b0b4f9))
 
+### Установка руководства
+
 Если всё удачно, то выполните три команды:
 
 ```
@@ -38,6 +38,37 @@ cd yii2-tutorial
 php -S localhost:8888
 ```
 и перейдите по адресу [http://localhost:8888/scripts/](http://localhost:8888/scripts/)
+
+### Как обновить руководство до актуального состояния?
+
+Самый простой способ удалить учебник и повторить шаги из секции "Установка руководства".
+
+Второй способ скачать только отличия, которых в вашей версии руководства нету. Для этого выполните:
+
+```
+cd yii2-tutorial
+git remote update
+```
+
+Далее нужно обратить внимание на ветки git, которые имеют изменения и выполнить для них команды. Например для `master`:
+
+```
+git remote update                                         
+    Fetching origin                                             
+    remote: Counting objects: 3, done.                          
+    remote: Compressing objects: 100% (3/3), done.              
+    remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+    Unpacking objects: 100% (3/3), done.                        
+    From https://github.com/githubjeka/yii2-tutorial            
+       8d08bb3..537ddc6  master     -> origin/master  
+                                                            
+\yii2-tutorial (master)                          
+git pull                                                  
+    Updating 8d08bb3..537ddc6                                   
+    Fast-forward                                                
+     readme.md | 15 ++++++++++++++-                             
+     1 file changed, 14 insertions(+), 1 deletion(-)            
+```
 
 ### Лицензия & Авторские права
 
