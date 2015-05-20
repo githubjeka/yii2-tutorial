@@ -25,6 +25,4 @@ $I->see('Incorrect username or password.', '.help-block');
 $I->amGoingTo('try to login with correct credentials');
 $loginPage->login('erau', 'password_0');
 $I->expectTo('see that user is logged');
-$I->seeLink('Logout (erau)');
-$I->dontSeeLink('Login');
-$I->dontSeeLink('Signup');
+$I->seeLink('Выход (erau)');
