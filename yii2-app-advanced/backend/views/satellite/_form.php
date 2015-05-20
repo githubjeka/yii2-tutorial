@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Planet;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,12 +13,18 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => 255]) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder' => 'Введите название спутника']) ?>
 
-    <?= $form->field($model, 'planet_id')->textInput() ?>
+    <?= $form->field($model, 'planet_id')
+        ->dropDownList(\yii\helpers\ArrayHelper::map(Planet::find()->all(), 'id', 'name'))
+        ->label('Название планеты')
+        ->hint('У этой планеты появится новый спутник.') ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton(
+            $model->isNewRecord ? 'Создать' : 'Изменить',
+            ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
+        ) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

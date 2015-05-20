@@ -43,8 +43,8 @@ class Planet extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'star_id' => 'Star ID',
+            'name' => 'Наименование',
+            'star_id' => 'ID звезды',
         ];
     }
 

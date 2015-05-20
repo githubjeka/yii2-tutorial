@@ -12,13 +12,15 @@ use common\models\Planet;
  */
 class SearchPlanet extends Planet
 {
+    public $countSatellites;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'star_id'], 'integer'],
+            [['id', 'star_id', 'countSatellites'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -41,24 +43,44 @@ class SearchPlanet extends Planet
      */
     public function search($params)
     {
-        $query = Planet::find();
+        $query = Planet::find()
+            ->select([$this->tableName() . '.*', 'count(planet_id) as countSatellites'])
+            ->joinWith('satellites')
+            ->groupBy($this->tableName() . '.id');
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $dataProvider = new ActiveDataProvider(
+            [
+                'query' => $query,
+                'sort' => [
+                    'attributes' => [
+                        'id',
+                        'name',
+                        'star_id',
+                        'countSatellites' => [
+                            'asc' => ['countSatellites' => SORT_ASC,],
+                            'desc' => ['countSatellites' => SORT_DESC,],
+                        ],
+                    ]
+                ]
+            ]
+        );
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'star_id' => $this->star_id,
-        ]);
+        if ($this->countSatellites) {
+            $query->having(['countSatellites' => (int)$this->countSatellites]);
+        }
+
+        $query->andFilterWhere(
+            [
+                $this->tableName() . '.id' => $this->id,
+                'star_id' => $this->star_id,
+            ]
+        );
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 

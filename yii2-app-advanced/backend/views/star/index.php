@@ -7,28 +7,33 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\SearchStar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Stars';
+$this->title = 'Звёзды';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="star-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Create Star', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'name',
-
-            ['class' => 'yii\grid\ActionColumn'],
+    <?= GridView::widget(
+        [
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                'id',
+                'name',
+                [
+                    'label' => 'Количество планет',
+                    'attribute' => 'countPlanets',
+                    'value' => function($planet) {
+                        return $planet->getPlanets()->count();
+                    }
+                ],
+                ['class' => 'yii\grid\ActionColumn'
+            ],
         ],
     ]); ?>
 

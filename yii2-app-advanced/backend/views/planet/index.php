@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\SearchPlanet */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Planets';
+$this->title = 'Планеты';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="planet-index">
@@ -16,19 +16,32 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Planet', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить планету', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
-            'name',
-            'star_id',
-
+            [
+                'attribute'=>'name',
+                'label'=>'Планета',
+            ],
+            [
+                'label'=>'Звезда',
+                'attribute'=>'star_id',
+                'value' => function($planet) {
+                    return $planet->star->name;
+                }
+            ],
+            [
+                'label'=>'Количество спутников',
+                'attribute'=>'countSatellites',
+                'value' => function($planet) {
+                    return $planet->getSatellites()->count();
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Planet */
 
-$this->title = 'Create Planet';
-$this->params['breadcrumbs'][] = ['label' => 'Planets', 'url' => ['index']];
+$this->title = 'Новая планета';
+$this->params['breadcrumbs'][] = ['label' => 'Планеты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="planet-create">
