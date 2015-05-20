@@ -1,4 +1,6 @@
-### Формы для сохранения данных
+### Сохранение реляционных данных.
+
+#### Формы для сохранения данных
 
 Вы наверное уже обратили внимание на формы для сохранения:
 
@@ -121,16 +123,16 @@ echo $form->field($model, 'planet')->dropDownList($stars);
 Так как формы, для редактирования существующих моделей используются одни и те же, что и для сохранения. То, что-либо новое
 создавать не нужно.
 
-#### Сохранение реляционных данных.
+#### Проверка работоспособности формы через тест
 
-У нас есть три формы для трёх разных моделей. Представьте себе ситуацию: нужно ввести информацию по новой планете, но звезды
-у неё ещё нету. Не совсем удобно переключаться с формы на форму, сохраняя новые данные. Давайте объединим работу с тремя
-формами в одной. Для этого нам понадобится новая модель формы, которая будет объединять работу с тремя моделями 
-относительно модели Планет.
+В этом подразделе описывается как написать функциональный тест для формы. Такой тест упростит отладку и разработку формы.
+Возможно, вам легче использовать браузер и по сто пятьдесят раз выдумывать и вводить данные, для того, чтобы проверить 
+сохранение данных через форму, после очередной правки кода. Если это так, то можете пропустить этот подраздел и перейти 
+дальше. Остальным добро пожаловать.
 
-Давайте начнём с теста. Это упростит отладку и разработку. Будем двигаться небольшими шагами, чтобы было понятнее и легче.
+Будем двигаться небольшими шагами, чтобы было понятнее и легче.
 
-Создадим функциональный тест `PlanetFormCept`:
+Создадим функциональный тест `PlanetFormCept`, который будет проверять работу формы для сохранения данных по планетам.
 
 ```
 cd yii2-app-advanced\tests\codeception\backend\
@@ -139,10 +141,10 @@ codecept build
 
 ```
 codecept generate:cept functional PlanetFormCept
-    Test was created in PlanetFormCept.php
+    Test was created in ...
 ```
 
-Откройте файл теста `PlanetFormCept.php` и измените его содержимое на:
+Откройте созданный файл `PlanetFormCept.php` и измените его содержимое на:
 
 ```php
 <?php use tests\codeception\backend\FunctionalTester;
@@ -160,8 +162,9 @@ codecept run functional functional/PlanetFormCept.php
     OK (1 test, 0 assertions)
 ```
 
-Теперь к тесту добавим команду на открытие страницы с формой. Для этого нужно создать объект этой страницы. 
-В директории `yii2-app-advanced/tests/codeception/backend/_pages/` создайте `PlanetFormPage.php`:
+Как видно запустился 1 тест и выполнилось 0 проверок. Теперь к тесту добавим команду на открытие страницы с формой. 
+ля этого нужно создать объект этой страницы. В директории `yii2-app-advanced/tests/codeception/backend/_pages/` создайте
+`PlanetFormPage.php` с содержимым:
 
 ```php
 <?php
@@ -209,7 +212,7 @@ $I = new FunctionalTester($scenario);
 $I->wantTo('ensure than create form works');
 $formPage = \tests\codeception\backend\PlanetFormPage::openBy($I);
 
-$I->fillField('//*[@id="planet-name"]','Земля');
+$I->fillField('//*[@id="planet-name"]','Новая Земля');
 $I->selectOption('//*[@id="planet-star_id"]', 'Солнце');
 $I->click('//*[@id="w0"]/div[3]/button');
 $I->dontSeeInTitle('Новая планета');
@@ -251,7 +254,7 @@ modules:
             configFile: '../config/backend/functional.php'
 ```
 
-откройте этот файл и найдите его метод:
+Откройте файл помощник `FixtureHelper.php` и найдите его метод:
 
 ```php
 public function fixtures()
@@ -265,7 +268,7 @@ public function fixtures()
 }
 ```
 
-Запуская каждый раз любой функциональный тест из backend, стартует фикстура UserFixture:
+Запуская каждый раз любой функциональный тест из backend, запускается `FixtureHelper`, который загружает фикстуру `UserFixture`:
 
 ```php
 class UserFixture extends ActiveFixture
@@ -274,13 +277,9 @@ class UserFixture extends ActiveFixture
 }
 ```
 
-, которая очищает таблицу для модели `common\models\User`. А затем заполняет её данными из `dataFile`.
+, которая очищает таблицу для модели `common\models\User`, а затем заполняет её данными из `dataFile`.
 
-Для кого-то, на первый раз это всё может показаться сложным и избыточным. Ведь мы ушли в сторону, а могли бы за это время
-уже создать необходимую форму и двигаться дальше. Но нет, топчемся на месте. Тяжело в учении - легко в бою.
-Сделайте паузу, выпейте кофе, расслабитесь. Когда отдохнули - продолжим. 
-
-Создадим новые фикстуры, которые будут сбрасывать состояние таблицы для звёзд, планет и их спутников. Создайте в 
+Добавим новые фикстуры, которые будут сбрасывать состояние таблицы для звёзд, планет и их спутников. Создайте в 
 `yii2-app-advanced/tests/codeception/common/fixtures` файлы:
 
 - PlanetFixture.php
@@ -302,7 +301,7 @@ class SatelliteFixture extends ActiveFixture
 
 ```
 
-Остальные две: `PlanetFixture` и `StarFixture` создайте самостоятельно.
+Код её простой, остальные две: `PlanetFixture` и `StarFixture` создайте самостоятельно.
 
 Без `$dataFile` фикстуры <a href="http://www.yiiframework.com/doc-2.0/yii-test-activefixture.html" target="_blank">ActiveFixture</a>
 будут очищать таблицы без внесения первоначальных данных. Явно можно не указывать расположение файла с данными(`$dataFile`),
@@ -334,40 +333,73 @@ public function fixtures()
 {
     return [
         'user' => [
-            'class' => UserFixture::className(),
-            'dataFile' => '@tests/codeception/common/fixtures/data/init_login.php',
+           'class' => UserFixture::className(),
+           'dataFile' => '@tests/codeception/common/fixtures/data/init_login.php',
         ],
         'star' => [
-            'class' => tests\codeception\common\fixtures\StarFixture::className(),
+           'class' => tests\codeception\common\fixtures\StarFixture::className(),
         ],
         'planet' => [
-            'class' => tests\codeception\common\fixtures\PlanetFixture::className(),                
+           'class' => tests\codeception\common\fixtures\PlanetFixture::className(),                
         ],
         'satellite' => [
-            'class' => tests\codeception\common\fixtures\SatelliteFixture::className(),
+           'class' => tests\codeception\common\fixtures\SatelliteFixture::className(),
         ],
     ];
 }
 ```
 
 <p class="alert alert-info">У <a href="http://www.yiiframework.com/doc-2.0/yii-test-activefixture.html" target="_blank">ActiveFixture</a>
-есть свойстов `$depends`, с помощью которого можно также установить порядок связей фикстур.
+есть свойство $depends, с помощью которого можно также установить порядок связей фикстур.
 </p>
 
-Теперь при запуске теста формы, мы сможем выбрать звезду из выпадающего списка.
+Фикстуры созданы, при запуске теста таблицы будут очищаться и заполняться данными из файлов `yii2-app-advanced/tests/codeception/common/fixtures/data/`.
+Поэтому теперь при запуске теста формы, мы сможем выбрать звезду из выпадающего списка:
  
 ```php
-codecept run functional functional/PlanetFormCept.php  
-                                                                                  
-    Tests\codeception\backend.functional Tests (1) ------
-    ------------------------------------------                                        
-    Trying to ensure than create form works Ok                                            
-    -----------------------------------------------------
-                                                                                                  
-    Time: 1.03 seconds, Memory: 21.50Mb                                              
-    OK (1 test, 1 assertion)                                                          
+codecept run functional functional/PlanetFormCept.php
+
+    Tests\codeception\backend.functional Tests (1)                                
+    Trying to ensure than create form works Ok
+        
+    Time: 1.03 seconds, Memory: 21.50Mb
+    OK (1 test, 1 assertion)
 ```
+
+Если посмотреть в контроллер `yii2-app-advanced/backend/controllers/PlanetController.php`, то в методе `actionCreate`
+можно увидеть, что после сохранения происходит переход на действие `view`
+
+```php
+ return $this->redirect(['view', 'id' => $model->id]);
+```
+
+В конце нашего теста указано:
+
+```php
+$I->dontSeeInTitle('Новая планета');
+```
+
+что не совсем корректно, так как данные могут не сохраниться, появится ошибка, но в этом случае `dontSeeInTitle` вернёт
+утвердительный результат и тест выполнится успешно. Лучше заменить эту проверку на:
+
+```php
+$I->seeInTitle('Новая Земля');
+```
+
+Теперь мы можем смело вносить изменения в код формы и запуская тест видеть, что всё работает корректно. Причём затраты по
+времени на проверку составит всего около 1 секунды, в то время как раньше, когда вы проверяли форму самостоятельно через
+браузер, уходило куда больше времени. Для закрепления основ самостоятельно напишите тесты к формам для сохранения 
+звёзд и спутников.
+
+#### Сохранение реляционных данных.
+
+У нас есть три формы для трёх разных моделей. Представьте себе ситуацию: нужно ввести информацию по новой планете, но звезды
+у неё ещё нету. Не совсем удобно переключаться с формы на форму, сохраняя новые данные. Давайте объединим работу с тремя
+формами в одной. Для этого нам понадобится новая модель формы, которая будет объединять работу с тремя моделями 
+относительно модели Планет.
+
 
 #### Дополнительная информация для самостоятельного ознакомления:
 
 - <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/helper-array.md" target="_blank">Руководство по ArrayHelper</a>.
+- <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/test-fixtures.md" target="_blank">Руководство по фикстурам</a>.
