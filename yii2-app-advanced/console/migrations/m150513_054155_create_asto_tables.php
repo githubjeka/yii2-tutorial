@@ -29,7 +29,7 @@ class m150513_054155_create_asto_tables extends Migration
                 'name' => Schema::TYPE_STRING . ' NOT NULL',
                 'star_id' => Schema::TYPE_INTEGER . ' NOT NULL',
                 'FOREIGN KEY(star_id) REFERENCES '
-                . $this->db->quoteTableName('{{%star}}') . '(id)'
+                . $this->db->quoteTableName('{{%star}}') . '(id) ON UPDATE CASCADE ON DELETE CASCADE'
             ],
             $tableOptions
         );
@@ -40,8 +40,8 @@ class m150513_054155_create_asto_tables extends Migration
                 'id' => Schema::TYPE_PK,
                 'name' => Schema::TYPE_STRING . ' NOT NULL',
                 'planet_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-                'FOREIGN KEY(planet_id) REFERENCES '
-                . $this->db->quoteTableName('{{%planet}}') . '(id)'
+                'FOREIGN KEY(planet_id) REFERENCES'
+                . $this->db->quoteTableName('{{%planet}}') . '(id) ON UPDATE CASCADE ON DELETE CASCADE'
             ],
             $tableOptions
         );
