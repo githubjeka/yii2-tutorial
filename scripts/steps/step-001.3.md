@@ -304,7 +304,69 @@ class SatelliteFixture extends ActiveFixture
 
 Остальные две: `PlanetFixture` и `StarFixture` создайте самостоятельно.
 
+Без `$dataFile` фикстуры <a href="http://www.yiiframework.com/doc-2.0/yii-test-activefixture.html" target="_blank">ActiveFixture</a>
+будут очищать таблицы без внесения первоначальных данных. Явно можно не указывать расположение файла с данными(`$dataFile`),
+а просто его создать в той же директории, где лежит фикстура, с учётом имени таблицы. Т.е. для фикструры `SatelliteFixture`
+нужно создать в директории `yii2-app-advanced/tests/codeception/common/fixtures/data` файл с именем `satellite.php`. Для
+вашего удобства эти файлы уже созданы заранее.
 
+Фикстуры созданы, теперь нужно определить порядок их загрузки. Если мы сначала начнём загружать фикстуру для таблицы планет,
+то споткнёмся на ограничение внешних ключей в базе данных, т.е. вставляя данные из `yii2-app-advanced/tests/codeception/common/fixtures/data/planet.php`
+
+```php
+return [
+    [
+        'name' => 'Земля',
+        'star_id' => '1',
+    ],
+];
+```
+
+получим ошибку
+
+> SQLSTATE[23000]: Integrity constraint violation: 19 FOREIGN KEY constraint failed
+
+которая обозначает, что звезды с ID = 1 не найдено. Поэтому сначала нужно загрузить фикстуру для звезды,
+затем для планеты и на последок фикстуру для спутников. Подключаем загрузку фикстур в файле помощнике FixtureHelper:
+
+```php
+public function fixtures()
+{
+    return [
+        'user' => [
+            'class' => UserFixture::className(),
+            'dataFile' => '@tests/codeception/common/fixtures/data/init_login.php',
+        ],
+        'star' => [
+            'class' => tests\codeception\common\fixtures\StarFixture::className(),
+        ],
+        'planet' => [
+            'class' => tests\codeception\common\fixtures\PlanetFixture::className(),                
+        ],
+        'satellite' => [
+            'class' => tests\codeception\common\fixtures\SatelliteFixture::className(),
+        ],
+    ];
+}
+```
+
+<p class="alert alert-info">У <a href="http://www.yiiframework.com/doc-2.0/yii-test-activefixture.html" target="_blank">ActiveFixture</a>
+есть свойстов `$depends`, с помощью которого можно также установить порядок связей фикстур.
+</p>
+
+Теперь при запуске теста формы, мы сможем выбрать звезду из выпадающего списка.
+ 
+```php
+codecept run functional functional/PlanetFormCept.php  
+                                                                                  
+    Tests\codeception\backend.functional Tests (1) ------
+    ------------------------------------------                                        
+    Trying to ensure than create form works Ok                                            
+    -----------------------------------------------------
+                                                                                                  
+    Time: 1.03 seconds, Memory: 21.50Mb                                              
+    OK (1 test, 1 assertion)                                                          
+```
 
 #### Дополнительная информация для самостоятельного ознакомления:
 
