@@ -89,21 +89,30 @@ public function rules()
 Только вместо массива будем использовать запрос `Star::find()->all()`, который вернёт массив моделей.
 
 ```php
+use common\models\Star;
+
 $stars = [];
 
 foreach (Star::find()->all() as $star){
     $stars[$star->id] = $star->name;
 }
 
-echo $form->field($model, 'planet')->dropDownList($stars);
+echo $form->field($model, 'planet')->dropDownList(
+    $stars,
+    ['prompt' => 'Выберите звезду'] // текст, который отображается в качестве первого варианта
+); 
+
 ```
 
 Но можно переписать этот код с использованием класса помощника <a href="http://www.yiiframework.com/doc-2.0/yii-helpers-arrayhelper.html" target="_blank">
 yii\helpers\ArrayHelper</a>, который позволяет обращаться с массивами более эффективно:
 
 ```php
+use yii\helpers\ArrayHelper;
+use common\models\Star;
+
 $stars = ArrayHelper::map(Star::find()->all(), 'id', 'name');
-echo $form->field($model, 'planet')->dropDownList($stars);
+echo $form->field($model, 'planet')->dropDownList($stars, ['prompt' => 'Выберите звезду']);
 ```
 
 Конечно, вы можете обойтись без переменной `$stars`, записав этот код одну строку. Ну и после всего, для этой формы 
@@ -112,6 +121,8 @@ echo $form->field($model, 'planet')->dropDownList($stars);
 ```php
 <?php $form = ActiveForm::begin(['layout' => 'horizontal',]); ?>
 ```
+
+Только не забудьте, что в этом случае нужно использовать `yii\bootstrap\ActiveForm` вместо `yii\widgets\ActiveForm`.
 
 <img src="/scripts/assets/screen1.2-4.jpg" class="img-responsive">
 
