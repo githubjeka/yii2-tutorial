@@ -60,7 +60,7 @@ Active Record модель `Interview`, которая описывала фор
 
 Теперь, когда все изменения внесены, в backend возможно использовать модель `\common\models\Interview`. Создадим вид,
 в котором будут отображаться все записи из таблицы "Опросов". Чтобы облегчить выполнение этой задачи, 
-<a href="http://localhost:9000/yii2-app-advanced/backend/web/index.php?r=gii" target="_blank">обратимся к Gii</a>.
+<a href="/yii2-app-advanced/backend/web/index.php?r=gii" target="_blank">обратимся к Gii</a>.
 Выберите генератор "CRUD Generator", который генерирует виды и контроллер на основании модели. Введите в Model Class 
 `common\models\Interview`, а в Controller Class - `backend\controllers\InterviewController`. Всё, жмите Preview.
 "CRUD Generator" генерируется вид для создания, изменения, удаления и просмотра модели, также помогает генерировать 
@@ -114,7 +114,7 @@ new ActiveDataProvider([
 SELECT * FROM `interview` ORDER BY имя_атрибута LIMIT количество_записей_на_страницу OFFSET (номер_страницы - 1) * количество_записей_на_страницу
 ```
 
-Разбивка записей страницу и сортировка могут быть настроены следующим образом:
+Разбивка записей по страницам и сортировка могут быть настроены следующим образом для датапровайдера:
 
 ```php
 $dataProvider = new ActiveDataProvider([
@@ -133,6 +133,8 @@ $dataProvider = new ActiveDataProvider([
 Когда данные получены из базы данных, то с учётом настроек свойства `columns` виджета GridView эти данные приобретают 
 окончательный вид и выводятся на экран. Формат вывода данных может быть изменён путём изменения свойства 
 <a href="http://www.yiiframework.com/doc-2.0/yii-grid-gridview.html#$columns-detail" target="_blank">columns</a>:
+
+Вид `\yii2-tutorial\yii2-app-advanced\backend\views\interview\index.php`
 
 ```php
 <?php
