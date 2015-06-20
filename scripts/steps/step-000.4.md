@@ -114,7 +114,7 @@ new ActiveDataProvider([
 SELECT * FROM `interview` ORDER BY имя_атрибута LIMIT количество_записей_на_страницу OFFSET (номер_страницы - 1) * количество_записей_на_страницу
 ```
 
-Разбивка записей страницу и сортировка могут быть настроены следующим образом:
+Разбивка записей по страницам и сортировка могут быть настроены следующим образом для датапровайдера:
 
 ```php
 $dataProvider = new ActiveDataProvider([
@@ -133,6 +133,8 @@ $dataProvider = new ActiveDataProvider([
 Когда данные получены из базы данных, то с учётом настроек свойства `columns` виджета GridView эти данные приобретают 
 окончательный вид и выводятся на экран. Формат вывода данных может быть изменён путём изменения свойства 
 <a href="http://www.yiiframework.com/doc-2.0/yii-grid-gridview.html#$columns-detail" target="_blank">columns</a>:
+
+Вид `\yii2-tutorial\yii2-app-advanced\backend\views\interview\index.php`
 
 ```php
 <?php
