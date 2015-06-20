@@ -60,7 +60,7 @@ Active Record модель `Interview`, которая описывала фор
 
 Теперь, когда все изменения внесены, в backend возможно использовать модель `\common\models\Interview`. Создадим вид,
 в котором будут отображаться все записи из таблицы "Опросов". Чтобы облегчить выполнение этой задачи, 
-<a href="http://localhost:9000/yii2-app-advanced/backend/web/index.php?r=gii" target="_blank">обратимся к Gii</a>.
+<a href="/yii2-app-advanced/backend/web/index.php?r=gii" target="_blank">обратимся к Gii</a>.
 Выберите генератор "CRUD Generator", который генерирует виды и контроллер на основании модели. Введите в Model Class 
 `common\models\Interview`, а в Controller Class - `backend\controllers\InterviewController`. Всё, жмите Preview.
 "CRUD Generator" генерируется вид для создания, изменения, удаления и просмотра модели, также помогает генерировать 
