@@ -39,7 +39,14 @@ git clone "https://github.com/githubjeka/yii2-tutorial"
 cd yii2-tutorial
 php -S localhost:8888
 ```
-и перейдите по адресу [http://localhost:8888/scripts/](http://localhost:8888/scripts/)
+
+не закрывая терминал, перейдите по адресу [http://localhost:8888/scripts/](http://localhost:8888/scripts/).
+Если страница не доступна, то возможно порт 8888 занят каким-нибудь процессом. Попробуйте другой порт, например 9000
+
+```
+php -S localhost:9000
+```
+не закрывая терминал, перейдите по адресу [http://localhost:9000/scripts/](http://localhost:8888/scripts/).
 
 ### Как обновить руководство до актуального состояния?
 
