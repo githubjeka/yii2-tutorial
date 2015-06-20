@@ -123,19 +123,24 @@ Url формируется как id контроллера и id действи
 по этому адресу используем метод контроллера `redirect()`
 
 ```php
-public function actionInterview()
+use yii\helpers\Url;
+
+class SiteController extends Controller
 {
-    $model = new Interview();
-    if ($model->load(Yii::$app->request->post())) {
-        if ($model->validate()) {
-            Yii::$app->session->setFlash(
-                'success',
-                'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
-            );
-            return $this->redirect(Url::home());
-        }
-    }    
-    return $this->render('interview', ['model' => $model,]);
+    public function actionInterview()
+    {
+        $model = new Interview();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                Yii::$app->session->setFlash(
+                    'success',
+                    'Спасибо, что уделили время. В ближайшее время будут опубликованы результаты.'
+                );
+                return $this->redirect(Url::home());
+            }
+        }    
+        return $this->render('interview', ['model' => $model,]);
+    }
 }
 ```
 
@@ -219,10 +224,10 @@ $this->on(
 
 - Контроллер последовательно вызывает метод beforeAction() приложения и самого контроллера.
 Если один из методов вернул false, то остальные, невызванные методы beforeAction будут пропущены, а выполнение действия будет отменено;
-По-умолчанию, каждый вызов метода beforeAction() вызовет событие EVENT_BEFORE_ACTION.
+По умолчанию, каждый вызов метода beforeAction() вызовет событие EVENT_BEFORE_ACTION.
 - Контроллер запускает действие: параметры действия будут проанализированы и заполнены из данных запроса.
 - Контроллер последовательно вызывает методы afterAction контроллера и приложения.
-По-умолчанию, каждый вызов метода afterAction() вызовет событие EVENT_AFTER_ACTION.
+По умолчанию, каждый вызов метода afterAction() вызовет событие EVENT_AFTER_ACTION.
 
 Нужно как-то вклинится в это **поведение** с проверками сессии. Для работы с поведениями в Yii используется
 <a href="http://www.yiiframework.com/doc-2.0/yii-base-behavior.html" target="_blank">yii\base\Behavior</a>

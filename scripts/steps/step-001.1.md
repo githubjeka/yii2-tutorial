@@ -9,8 +9,8 @@
 git checkout -f step-1.1
 ```
 
-Сперва давайте на словах определимся, что мы хотим получить. Возьмём нашу солнечную систему. В нашей солнечной системе
-есть звезда Солнце, вокруг звезды вращаются планеты - Меркурий, Венера, Земля, Марс, Церера, Юпитер, Сатурн, Уран, 
+Сперва определимся, что мы хотим получить. Возьмём нашу солнечную систему. В солнечной системе есть звезда Солнце, 
+вокруг звезды вращаются планеты - Меркурий, Венера, Земля, Марс, Церера, Юпитер, Сатурн, Уран, 
 Нептун, Плутон, Хаумеа, Макемаке, Эрида; а вокруг планет их спутники. Для хранение этих данных нам понадобятся три 
 таблицы: звезды, планеты, спутники.
 
@@ -44,14 +44,14 @@ Planet, но не Planets. Внешние ключи принято называ
 ключи - "id". <a href="https://toster.ru/q/139295" target="_blank">Подробнее...</a>
 </p>
 
-Давайте создадим эти таблицы, через миграцию. Выполните в `yii2-tutorial\yii2-app-advanced`:
+Создадим эти таблицы, через миграцию. Выполните в `yii2-tutorial\yii2-app-advanced`:
 
 ```
 php yii migrate/create create_asto_tables
 
-Yii Migration Tool (based on Yii v2.0.3)
-Create new migration '/yii2-tutorial/yii2-app-advanced/console/migrations/m150513_054155_create_asto_tables.php'? (yes|no) [no]:yes
-New migration created successfully.
+    Yii Migration Tool (based on Yii v2.0.3)
+    Create new migration '/yii2-tutorial/yii2-app-advanced/console/migrations/m150513_054155_create_asto_tables.php'? (yes|no) [no]:yes
+    New migration created successfully.
 ```
 
 Приведём код миграции к следующему виду:
@@ -88,7 +88,7 @@ class m150513_054155_create_asto_tables extends Migration
                 'name' => Schema::TYPE_STRING . ' NOT NULL',
                 'star_id' => Schema::TYPE_INTEGER . ' NOT NULL',
                 'FOREIGN KEY(star_id) REFERENCES '
-                . $this->db->quoteTableName('{{%star}}') . '(id)'
+                . $this->db->quoteTableName('{{%star}}') . '(id) ON UPDATE CASCADE ON DELETE CASCADE'
             ],
             $tableOptions
         );
@@ -100,7 +100,7 @@ class m150513_054155_create_asto_tables extends Migration
                 'name' => Schema::TYPE_STRING . ' NOT NULL',
                 'planet_id' => Schema::TYPE_INTEGER . ' NOT NULL',
                 'FOREIGN KEY(planet_id) REFERENCES '
-                . $this->db->quoteTableName('{{%planet}}') . '(id)'
+                . $this->db->quoteTableName('{{%planet}}') . '(id) ON UPDATE CASCADE ON DELETE CASCADE'
             ],
             $tableOptions
         );
@@ -128,7 +128,7 @@ class m150513_054155_create_asto_tables extends Migration
 ```
 
 Так как наша миграция, может в будущем использоваться не только на SQLite, но и на Mysql, то для Mysql с помощью
-`$tableOptions` устанавливаем кодировку и `ENGINE=InnoDB`, для работы с внешними ключами `FOREIGN KEY`. В SQLite по-умолчанию 
+`$tableOptions` устанавливаем кодировку и `ENGINE=InnoDB`, для работы с внешними ключами `FOREIGN KEY`. В SQLite по умолчанию 
 <a href="https://www.sqlite.org/foreignkeys.html#fk_enable" target="_blank">проверка внешних ключей отключена</a>.
 Для того, чтобы её включить необходимо выполнить команду:
 
@@ -136,7 +136,9 @@ class m150513_054155_create_asto_tables extends Migration
 PRAGMA foreign_keys = ON;
 ```
 
-Выполнять её требуется всякий раз, когда устанавливается соединение. У `yii\db\Connection` есть события:
+Выполнять её требуется всякий раз, когда устанавливается соединение с базой данных. У класса, который в нашем случае
+отвечает за соединение, <a href="http://www.yiiframework.com/doc-2.0/yii-db-connection.html" target="_blank">yii\db\Connection</a>
+есть события:
 
 - `EVENT_AFTER_OPEN` - срабатывает каждый раз, после установки соединения с БД.
 - `EVENT_BEGIN_TRANSACTION` - срабатывает каждый раз, перед началом транзакции.
@@ -144,7 +146,7 @@ PRAGMA foreign_keys = ON;
 - `EVENT_ROLLBACK_TRANSACTION` - срабатывает каждый раз, после отмены транзакции.
 
 Присоединим на событие `EVENT_AFTER_OPEN` функцию-обработчик, которая будет включать проверку внешних ключей в SQLite.
-Это можно сделать, через глобальную конфигурацию компонента:
+Это можно сделать, через глобальную конфигурацию компонента. Добавьте к настройкам базы данных `on afterOpen`:
 
 ```php
 'db' => [
@@ -156,9 +158,13 @@ PRAGMA foreign_keys = ON;
 ],
 ```
 
+<p class="alert alert-info">Освежите знания <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/concept-events.md" target="_blank">
+о событиях в Yii 2</a>
+</p>
+
 Заметьте, что таким способом (`'on имя_события'=>обработчик`) можно присоединять обработчики к любым событиям 
 компонентов или приложений. Так же можно можно поступить и с поведениями. Например, запретить доступ "гостям" к 
-методу `logout` в контроллере `site`, можно с помощью `as access`
+методу `logout` в контроллере `site`, можно с помощью `as access`:
 
 ```php
 'as access' => [
@@ -179,33 +185,32 @@ PRAGMA foreign_keys = ON;
 ```
 php yii migrate
 
-Yii Migration Tool (based on Yii v2.0.3)
-
-Total 1 new migration to be applied:
-        m150513_054155_create_asto_tables
-
-Apply the above migration? (yes|no) [no]:yes
-*** applying m150513_054155_create_asto_tables
-    > create table {{%star}} ... done (time: 0.059s)
-    > create table {{%planet}} ... done (time: 0.041s)
-    > create table {{%satellite}} ... done (time: 0.046s)
-*** applied m150513_054155_create_asto_tables (time: 0.204s)
-
-
-Migrated up successfully.
+    Yii Migration Tool (based on Yii v2.0.3)
+    
+    Total 1 new migration to be applied:
+            m150513_054155_create_asto_tables
+    
+    Apply the above migration? (yes|no) [no]:yes
+    *** applying m150513_054155_create_asto_tables
+        > create table {{%star}} ... done (time: 0.059s)
+        > create table {{%planet}} ... done (time: 0.041s)
+        > create table {{%satellite}} ... done (time: 0.046s)
+    *** applied m150513_054155_create_asto_tables (time: 0.204s)    
+    
+    Migrated up successfully.
 ```
 
 **Таблицы готовы**.
-![screen1.1-1.jpg](assets/screen1.1-1.jpg)
 
+<img src="/scripts/assets/screen1.1-1.jpg" class="img-responsive">
  
 Создадим модели, <a href="/yii2-app-advanced/backend/web/index.php?r=gii/default/view&id=model" target="_blank">
 через Gii.</a>
 
-![screen1.1-2.jpg](assets/screen1.1-2.jpg)
+<img src="/scripts/assets/screen1.1-2.jpg" class="img-responsive">
 
-Используя это изображение, остальные модели `Planet` и `Satellite` создайте самостоятельно. После в директории
-`yii2-app-advanced/common/models` появятся три класса `Planet.php`, `Star.php`, `Satellite.php`.
+Используя это изображение, остальные модели -`Planet` и `Satellite`, создайте самостоятельно. После в директории
+`yii2-app-advanced/common/models` появятся три файла `Planet.php`, `Star.php`, `Satellite.php`, которые описывают модели.
 
 #### Описание реляционных данных.
 
@@ -222,8 +227,8 @@ public function getPlanets()
 ```
 
 Из названия `getPlanets` можно понять, что данный метод должен возвращать модел**и** планет. Ну и в реализации,
-используется `$this->hasMany(Planet...`, который обозначает, что модель имеет много планет. Можно догадаться, что в моделях
-`Planet.php` и `Satellite.php` также должны быть похожие методы, которые описывают связи между моделями. И правда:
+используется `$this->hasMany(Planet...`, который обозначает, что звезда имеет много планет. Можно догадаться, что в моделях
+`Planet.php` и `Satellite.php` также должны быть похожие методы, которые описывают связи между моделями. Точно:
 
 ```php
 // в Planet.php
@@ -247,6 +252,10 @@ public function getPlanet()
     return $this->hasOne(Planet::className(), ['id' => 'planet_id']);
 }
 ```
+
+Метод `hasOne` из <a href="http://www.yiiframework.com/doc-2.0/yii-db-activerecord.html" target="_blank">ActiveRecord</a>
+в отличие `hasMany` обозначает отношение моделей, как связь один к одному. Например спутник Луна принадлежит только одной
+планете Земля.
 
 #### Доступ к реляционным данным.
 
@@ -277,7 +286,7 @@ $marsModel->getSatellites()->limit(10)->orderBy(['name'=>SORT_ASC])->limit(10)->
 Результатом будет массив Active Record моделей. Иногда, для экономии памяти, результат стоит возвращать в виде массива
 значений с помощью `->asArray()->all()`.
 
-Все эти примеры выполняли в два этапа: находилась модель, находились отношения, если в этом была необходимость.
+Эти примеры выполняли в два этапа: находилась модель, находились отношения, если в этом была необходимость.
 Можно сделать тоже самое в один запрос:
 
 ```php
@@ -298,34 +307,6 @@ $marsModel->getSatellites()->all();
 ```php
 $marsModel = Planet::find()->where(['name'=>'Марс'])->one();
 $marsModel->satellites; //вернёт массив Active Record моделей Satellites
-```
-
-#### Вывод реляционных данных в видах.
- 
-Сгенерируйте <a href="/yii2-app-advanced/backend/web/index.php?r=gii/default/view&id=crud" target="_blank">
-через CRUD Gii.</a> виды и контроллер по следующему изображению:
-
-![screen1.1-3.jpg](assets/screen1.1-3.jpg)
-
-Чтобы убедиться в правильности выполненных действий выполните тесты.
-
-Из `yii2-tutorial\yii2-app-advanced\tests\codeception\bin` установите миграцию для тестовой базы
-
-```
-php yii migrate
-```
-
-Из `yii2-tutorial\yii2-app-advanced\tests\codeception\backend` выполните две команды для запуска тестов:
-
-```
-codecept build
-```
-
-```
-codecept run functional functional\AstroCept.php
-
-Time: 519 ms, Memory: 21.00Mb
-OK (1 test, 3 assertions)
 ```
 
 #### Дополнительная информация для самостоятельного ознакомления:
