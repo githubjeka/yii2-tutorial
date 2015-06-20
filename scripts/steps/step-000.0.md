@@ -125,6 +125,12 @@ Migrated up successfully.
  
 Теперь в `yii2-app-advanced` можно обнаружить файл `sqlite.db` - это и есть SQLite база данных.
 
+<p class="alert alert-info">
+Для своего удобства можете воспользоваться бесплатной <a href="http://sqlitebrowser.org/" target="_blank">программой просмотра SQLite</a>.
+Просто откройте файл sqlite.db с помощью этой программы, но учтите, что это может стать причиной блокировки работы 
+с этим файлом для нашего руководства.
+</p>
+
 Ну что ж, вернёмся на <a href="/yii2-app-advanced/frontend/web/index.php?r=site%2Fsignup" target="_blank">Signup</a>
 и попробуем ввести регистрационные данные: `Username` - `admin`, `Email` - `admin@local.net`, `Password` - `123456`.
 После отправки данных, произойдёт переход на главную страницу с последующей аутентификацией пользователя `admin`. Сейчас 
