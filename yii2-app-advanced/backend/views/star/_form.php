@@ -1,11 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\widgets\ActiveForm; //заменить на yii\bootstrap\ActiveForm, если планируете использовать ['layout' => 'horizontal',]
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Star */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form ActiveForm */
 ?>
 
 <div class="star-form">
