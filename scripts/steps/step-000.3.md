@@ -525,7 +525,7 @@ public function actionInterview()
 
 Метод `save($runValidation)` подразумевает под собой следующий сценарий:
 
-1. вызывается `beforeValidate()`, если `$runValidation = true`. Если `$runValidation = false` этот и последующий шаги
+1. вызывается `beforeValidate()`, если `$runValidation = true`. Если `$runValidation = false` этот и последующий шаг
  игнорируется.
 2. вызывается `afterValidate()`.
 3. вызывается `beforeSave()`. Если метод возвращает false, то процесс прерывается и дальнейшие шаги не выполняются.
