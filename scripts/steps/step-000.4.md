@@ -51,15 +51,52 @@ TODO: https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/security-authent
 
 Теперь давайте вернёмся к форме "Опрос". Для работы с формой в клиентской части(далее frontend) мы использовали 
 Active Record модель `Interview`, которая описывала форму. Т.к. эта модель описана в frontend, то в backend
-она не доступна. Чтобы исправить это, необходимо модель расположить в общей директории - `common/models/`. 
-Необходимо скопировать файл `Interview.php` из `frontend/models` в `common/models/`. Это уже сделано.
+к ней можно обратиться как `frontend/models/Interview` - что не совсем корректно.
+Чтобы исправить это, необходимо модель расположить в общей директории - `common/models/`. 
+Необходимо переместить файл `Interview.php` из `frontend/models` в `common/models/`. Это уже сделано.
 
-Вам осталось изменить файлы следующим образом. В common модели изменим пространство имени, удалим свойство "проверочный
-код", удалим правила, так как это всё требуется на стороне frontend части. А в frontend модели изменить 
-родительский класс с `\yii\db\ActiveRecord` на `\common\models\Interview` и удалите методы `tableName()` и `attributeLabels()`.
+Вам осталось изменить файлы, зависимые от этой модели, следующим образом:
 
-Теперь, когда все изменения внесены, в backend возможно использовать модель `\common\models\Interview`. Создадим вид,
-в котором будут отображаться все записи из таблицы "Опросов". Чтобы облегчить выполнение этой задачи, 
+- в common модели `yii2-app-advanced/common/models/Interview.php` изменить пространство имени класса.
+
+- поменять в `frontend/controllers/SiteControllers.php` в методе `actionInterview()` пространство имени для этой модели
+ с `frontend/models/Interview` на `common/models/Interview`.
+
+- поменять в виде `yii2-app-advanced/frontend/views/site/interview.php` пространство имени, также как в предыдущем случае.
+
+- удалить файл `yii2-app-advanced/frontend/models/Interview.php`
+
+Теперь, когда все изменения внесены, в backend и frontend возможно использовать единую AR модель - `\common\models\Interview`.
+
+<p class="alert alert-info">
+Для того, чтобы избежать такой ситуации в будущем, лучше сразу генерировать все модели Active Record в "common/models".
+</p>
+
+#### Важный момент: Разделение моделей Active Record
+
+Очень часто, модель Active Record разбивается на два, три класса, т.е. `\common\models\Interview` и её наследники
+`\frontend\models\Interview` и `\backend\models\Interview`. Сперва это кажется логичным и правильным. Но такое разделение
+влечёт за собой скрытые проблемы. Возможно в большинстве случаев вы даже не столкнётесь с этими проблемами, но они существуют.
+Вот некоторые из них:
+
+- может возвратиться некорректная связь с другими разделёнными моделями, вместо ожидаемой `backend/models/Interview`
+ вам будет доступна только `common/models/Interview` и будет сложно исправить сложившеюся ситуацию.
+
+- изменения общей модели, может оказать негативное влияние на работу модели из другого модельного слоя (frontend, backend). 
+Такое на практике встречается очень часто, после правок в общей - ломается что-то критичное на backend.
+
+- проблемы с перекрытием событий: beforeValidate. Выливается в проблемы с перекрытием сценариев при валидации.
+Придётся создавать "костыльный" код `return Model::scenarios();`
+
+Единственным плюсом от разделения это не нужно дублировать атрибуты модели, для остальных моделей, которые обрабатывают AR.
+Но этот плюс теряется за кучей недостатков. В общем постарайтесь придерживаться логики , что модельный слой (Active Record)
+должен быть единым для разных частей приложения (backend, frontend, rest и т.д.). Поэтому работая с yii2-advanced располагайте
+все Active Record модели в `common/models/`. Или создавайте отдельные для frontend и backend, если уж логика настолька
+различна и её нужно разделить. 
+
+#### Виджет GridView
+
+Создадим вид, в котором будут отображаться все записи из таблицы "Опросов". Чтобы облегчить выполнение этой задачи, 
 <a href="/yii2-app-advanced/backend/web/index.php?r=gii" target="_blank">обратимся к Gii</a>.
 Выберите генератор "CRUD Generator", который генерирует виды и контроллер на основании модели. Введите в Model Class 
 `common\models\Interview`, а в Controller Class - `backend\controllers\InterviewController`. Всё, жмите Preview.
@@ -69,8 +106,6 @@ Active Record модель `Interview`, которая описывала фор
 <a href="http://www.yiiframework.com/doc-2.0/yii-widgets-listview.html" target="_blank">ListView</a>
 Нажимаем "Generate" и наслаждаемся <a href="/yii2-app-advanced/backend/web/index.php?r=interview" target="_blank">
 результатами работы</a>.
-
-#### Виджет GridView
 
 Очень часто необходимо вывести данные в виде таблицы. Для решения этой задачи в Yii имеется сверхмощный виджет
 <a href="http://www.yiiframework.com/doc-2.0/yii-grid-gridview.html" target="_blank">yii\grid\GridView</a>. Разрабатывая
