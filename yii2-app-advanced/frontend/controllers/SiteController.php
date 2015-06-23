@@ -74,7 +74,7 @@ class SiteController extends Controller
 
     public function actionInterview()
     {
-        $model = new \frontend\models\Interview();
+        $model = new \common\models\Interview();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash(
