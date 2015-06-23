@@ -2,6 +2,7 @@
 
 namespace tests\codeception\frontend\unit\models;
 
+use common\models\Interview;
 use tests\codeception\frontend\unit\DbTestCase;
 use Codeception\Specify;
 
@@ -11,7 +12,7 @@ class InterviewTest extends DbTestCase
 
     public function testSaveInterview()
     {
-        $model = new \frontend\models\Interview(
+        $model = new Interview(
             [
                 'name' => 'Ivanov',
                 'sex' => 1,
