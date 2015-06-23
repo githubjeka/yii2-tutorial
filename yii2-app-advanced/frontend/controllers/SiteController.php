@@ -1,8 +1,6 @@
 <?php
 namespace frontend\controllers;
 
-use frontend\behaviors\AccessOnce;
-use frontend\models\Interview;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -13,7 +11,6 @@ use yii\base\InvalidParamException;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
@@ -74,7 +71,7 @@ class SiteController extends Controller
 
     public function actionInterview()
     {
-        $model = new \frontend\models\Interview();
+        $model = new \common\models\Interview();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash(
