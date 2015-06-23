@@ -14,14 +14,14 @@ use Yii;
  * @property string $astronauts
  * @property integer $planet
  */
-class Interview extends \yii\db\ActiveRecord // \yii\db\ActiveRecord измените на \common\models\Interview
+class Interview extends \yii\db\ActiveRecord
 {
     public $verifyCode;
 
     /**
      * @inheritdoc
      */
-    public static function tableName() // можно удалить, т.к. наследуется из common части
+    public static function tableName()
     {
         return 'interview';
     }
@@ -56,7 +56,7 @@ class Interview extends \yii\db\ActiveRecord // \yii\db\ActiveRecord измен�
     /**
      * @inheritdoc
      */
-    public function attributeLabels() // можно удалить, т.к. наследуется из common части
+    public function attributeLabels()
     {
         return [
             'name' => 'Имя',

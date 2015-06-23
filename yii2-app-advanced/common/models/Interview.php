@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models; // измените на common\models
+namespace frontend\models; // измените на \common\models\Interview
 
 use Yii;
 
@@ -16,7 +16,7 @@ use Yii;
  */
 class Interview extends \yii\db\ActiveRecord
 {
-    public $verifyCode; // можно удалить, т.к. необходимо только для frontend части
+    public $verifyCode;
 
     /**
      * @inheritdoc
@@ -29,7 +29,7 @@ class Interview extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules() // метод удалить, т.к. необходим только для frontend части
+    public function rules()
     {
         return [
             [['name', 'sex', 'planets', 'astronauts', 'planet'], 'required'],
@@ -66,5 +66,16 @@ class Interview extends \yii\db\ActiveRecord
             'planet' => 'На какую планету хотели бы полететь?',
             'verifyCode' => 'Проверочный код',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->planets = implode(',', $this->planets);
+            $this->astronauts = implode(',', $this->astronauts);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Interview */
+/* @var $model frontend\models\Interview */ // измените на \common\models\Interview
 /* @var $form ActiveForm */
 ?>
 <div class="interview">
