@@ -357,11 +357,35 @@ New migration created successfully.
 с тем же именем, что и имя файла. Этот класс содержит два метода `up()` и `down()`. Первый описывает, что происходит,
 когда миграция применяется, второй - что происходит, когда миграция аннулируется. Код принято писать так, чтобы он работал
 для любой СУБД, пусть то MySQL, PostgreSQL, SQlite или другая. Для того, чтобы писать универсальный код для всех СУБД
-в Yii реализован <a href="http://www.yiiframework.com/doc-2.0/yii-db-schema.html" targer="_blank">абстрактный класс yii\db\Schema</a>.
+в Yii реализован <a href="http://www.yiiframework.com/doc-2.0/yii-db-schema.html" target="_blank">абстрактный класс yii\db\Schema</a>.
 Этот класс описывает схему, как хранится информация в СУБД. При создании запроса определяется на основании `dns` компонента 
 `yii\db\Connection`, какую схему нужно использовать. В свою очередь эта схема реализует работу с данными в зависимости от СУБД.
+Кроме этого, класс `yii\db\Schema` содержит константы, которые позволяют описывать типы данных:
 
-Миграция для таблицы, которая будет храненить данных из формы "Опрос", выглядит следующим образом(Подробнее в в файле
+```php
+/**
+ * Поддерживаемые типы данных для описания колонок.
+ */
+const TYPE_PK = 'pk';
+const TYPE_BIGPK = 'bigpk';
+const TYPE_STRING = 'string';
+const TYPE_TEXT = 'text';
+const TYPE_SMALLINT = 'smallint';
+const TYPE_INTEGER = 'integer';
+const TYPE_BIGINT = 'bigint';
+const TYPE_FLOAT = 'float';
+const TYPE_DOUBLE = 'double';
+const TYPE_DECIMAL = 'decimal';
+const TYPE_DATETIME = 'datetime';
+const TYPE_TIMESTAMP = 'timestamp';
+const TYPE_TIME = 'time';
+const TYPE_DATE = 'date';
+const TYPE_BINARY = 'binary';
+const TYPE_BOOLEAN = 'boolean';
+const TYPE_MONEY = 'money';
+```
+
+Миграция для таблицы, которая будет хранить данных из формы "Опрос", выглядит следующим образом(Подробнее в в файле
 `yii2-app-advanced/console/migrations/m150428_104828_interview.php`) :
 
 ```php
@@ -374,6 +398,14 @@ $this->createTable('{{%interview}}', [
     'planet' => Schema::TYPE_INTEGER . ' NOT NULL',
 ], $tableOptions);
 ```
+
+Обратите внимание, что для описания типов данных используется не только константы, но и ключевые слова, например `. ' NOT NULL'`.
+Вы можете дополнять типы данных ключевыми словами до нужного вам состояния. 
+
+<p class="alert alert-info">
+Ключевое слова `Unsigned` не рекомендуется использовать в миграциях - 
+<a href="https://github.com/yiisoft/yii2/issues/1032" target="_blank">обсуждение на GitHub</a>.
+</p>
 
 С применением миграций мы уже сталкивались, когда создавали таблицу `user`. Применим новую миграцию:
 
