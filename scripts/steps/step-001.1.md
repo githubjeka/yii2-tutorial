@@ -41,7 +41,8 @@ Satellite
 
 <p class="alert alert-info">Хорошим тоном служит именовать таблицы в единственном числе на английском языке, например 
 Planet, но не Planets. Внешние ключи принято называть в сочетании имени и поля таблицы, например "planet_id", а первичные
-ключи - "id". <a href="https://toster.ru/q/139295" target="_blank">Подробнее...</a>
+ключи - "id". Также лучше называть сущность в lowercase или under_score, т.к. например при работе с PostgreSQL 
+UpperCase таблицы и поля нужно обрамлять двойными кавычками. <a href="https://toster.ru/q/139295" target="_blank">Подробнее...</a>
 </p>
 
 Создадим эти таблицы, через миграцию. Выполните в `yii2-tutorial\yii2-app-advanced`:
@@ -54,7 +55,8 @@ php yii migrate/create create_asto_tables
     New migration created successfully.
 ```
 
-Приведём код миграции к следующему виду:
+Новая миграция создана в `\yii2-tutorial\yii2-app-advanced\console\migrations\m150620_054003_create_asto_tables.php`
+Приведём её код к следующему виду:
 
 ```php
 <?php
@@ -117,7 +119,7 @@ class m150513_054155_create_asto_tables extends Migration
 ```
 
 Обратите внимание, что имена таблиц имеют вид `"{{%name}}"`. Это необходимо, если вы захотите использовать префикс в 
-именах таблиц, который можно установить через конфигурацию компонента `db`:
+именах таблиц, который можно установить через конфигурацию компонента `db` в `\yii2-tutorial\yii2-app-advanced\common\config\main-local.php`:
 
 ```php
  'db' => [
