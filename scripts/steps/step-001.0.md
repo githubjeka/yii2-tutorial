@@ -33,10 +33,11 @@ codecept run
 git checkout -f step-1.0
 ```
 
-
-<p class="alert alert-info">Под Windows вместо стандартной командной строки cmd лучше использовать другой интерпретатор.
-Тот который использует подсветку кода, например <a href="http://gooseberrycreative.com/cmder/" target="_blank">Cmder</a>.
-Если у вас возникли проблемы с кодировкой в командной строке, то попробуйте выполнить в ней команду "chcp 65001".
+<p class="alert alert-info">Работая под Windows вместо стандартной командной строки cmd удобнее использовать другой 
+интерпретатор, который использует подсветку кода. Например <a href="http://www.conemu.ru/" target="_blank">ConEmu</a>, он
+идёт в комплекте с <a href="http://open-server.ru/" target="_blank">OpenServer</a> или 
+<a href="http://gooseberrycreative.com/cmder/" target="_blank">Cmder</a>. Если у вас возникли проблемы с кодировкой 
+в командной строке, то попробуйте выполнить в ней команду "chcp 65001".
 </p>
 
 #### Codeception
