@@ -2,4 +2,6 @@
 /**
  * Application configuration for all backend test types
  */
-return [];
+return [
+    'language'=>'en-US'
+];

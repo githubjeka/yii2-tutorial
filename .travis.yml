@@ -1,0 +1,34 @@
+language: php
+php:
+  - 5.4
+
+# faster builds on new travis setup not using sudo
+sudo: false
+
+# cache vendor dirs
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+install:
+ - cd yii2-app-advanced
+# composer
+ - travis_retry composer self-update && composer --version
+ - export PATH="$HOME/.composer/vendor/bin:$PATH"
+# codeception
+ - travis_retry composer global require "codeception/codeception=2.0.*" "codeception/specify=*" "codeception/verify=*"
+# setup application:
+ - |
+   cd tests/codeception/common && codecept build
+   cd ../backend && codecept build
+   cd ../console && codecept build
+   cd ../frontend && codecept build
+   cd ../../../
+before_script:
+  - cd tests/codeception/bin && php yii migrate --interactive=0 && cd ../../../..
+
+script:
+ - |
+     php -S localhost:8888 > /dev/null 2>&1 &
+     cd yii2-app-advanced/tests
+     codecept run

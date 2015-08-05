@@ -5,7 +5,7 @@ use tests\codeception\frontend\AcceptanceTester;
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that home page works');
-$I->amOnPage(Yii::$app->homeUrl);
+$I->amOnPage(\yii\helpers\Url::to(Yii::$app->homeUrl));
 $I->see('Мой сайт');
 $I->seeLink('О нас');
 $I->click('О нас');

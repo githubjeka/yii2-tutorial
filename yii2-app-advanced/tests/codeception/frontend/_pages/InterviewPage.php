@@ -20,7 +20,7 @@ class InterviewPage extends BasePage
     public function submit(array $formData)
     {
         foreach ($formData as $field => $value) {
-            if ($field === 'name' || $field === 'verifyCode') {
+            if ($field === 'name' || $field === 'verifyCode' || $field === 'sex') {
                 $this->actor->fillField('input[name="Interview[' . $field . ']"]', $value);
             } elseif ($field === 'planets') {
                 foreach ($value as $val) {
