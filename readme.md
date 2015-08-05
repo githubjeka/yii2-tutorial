@@ -9,7 +9,7 @@
 | 3. Виды и шаблоны | [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.1)](https://travis-ci.org/githubjeka/yii2-tutorial)
 | 4. Формы, Active Record, Gii, Валидация. | [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.2)](https://travis-ci.org/githubjeka/yii2-tutorial)
 | 5. Сессия. События и поведения. Сохранение данных.| 
-| 6. Backend. GridView. Авторизация.| 
+| 6. Backend. GridView. Авторизация.| [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.4)](https://travis-ci.org/githubjeka/yii2-tutorial)
 | 7. Знакомство с тестированием.| 
 | 8. Доступ к реляционным данным.| 
 | 9. Отображение реляционных данных.| [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-1.2)](https://travis-ci.org/githubjeka/yii2-tutorial)
