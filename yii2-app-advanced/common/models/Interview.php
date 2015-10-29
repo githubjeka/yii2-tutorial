@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models; // измените на \common\models\Interview
+namespace frontend\models; // измените на "namespace common\models;"
 
 use Yii;
 
