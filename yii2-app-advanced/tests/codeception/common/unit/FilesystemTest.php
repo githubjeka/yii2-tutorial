@@ -19,7 +19,7 @@ class FilesystemTest extends TestCase
             function () use ($I) {
                 $I->amInPath(Yii::getAlias('@common/models'));
                 $I->openFile('Interview.php');
-                $I->seeInThisFile("namespace frontend\\models; // измените на \\common\\models\\Interview");
+                $I->seeInThisFile("namespace frontend\\models; // измените на "namespace common\\models;"");
 
             }
         );
