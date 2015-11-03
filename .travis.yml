@@ -26,6 +26,7 @@ install:
    cd ../../../
 before_script:
   - cd tests/codeception/bin && php yii migrate --interactive=0 && cd ../../../..
+  - phpenv config-rm xdebug.ini
 
 script:
  - |
