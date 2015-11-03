@@ -10,7 +10,7 @@ git checkout -f step-0
 <a href="/yii2-app-advanced/frontend/web/" target="_blank">ссылке</a>.
 
 <p class="alert alert-info">
-Пожалуйста, ознакомьтесь с <a href="https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/tutorial-advanced-app.md" target="_blank">
+Пожалуйста, ознакомьтесь с <a href="https://github.com/yiisoft/yii2-app-advanced/blob/master/docs/guide/README.md" target="_blank">
 официальным руководством</a>, для того чтобы иметь представление, как устроен "Шаблон приложения advanced".
 </p>
 
