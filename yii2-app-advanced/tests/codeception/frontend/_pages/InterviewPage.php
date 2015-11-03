@@ -26,6 +26,8 @@ class InterviewPage extends BasePage
                 foreach ($value as $val) {
                     $this->actor->checkOption('input[name="Interview[' . $field . '][]"][value=' . $val . ']');
                 }
+            } elseif ($field === 'sex') {
+                $this->actor->selectOption('[type="radio"][name="Interview[' . $field . ']"]', $value);
             } else {
                 $this->actor->selectOption('[name="Interview[' . $field . ']"]', $value);
             }
