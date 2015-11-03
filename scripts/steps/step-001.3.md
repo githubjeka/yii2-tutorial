@@ -97,7 +97,7 @@ foreach (Star::find()->all() as $star){
     $stars[$star->id] = $star->name;
 }
 
-echo $form->field($model, 'planet')->dropDownList(
+echo $form->field($model, 'star_id')->dropDownList(
     $stars,
     ['prompt' => 'Выберите звезду'] // текст, который отображается в качестве первого варианта
 ); 
@@ -112,7 +112,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Star;
 
 $stars = ArrayHelper::map(Star::find()->all(), 'id', 'name');
-echo $form->field($model, 'planet')->dropDownList($stars, ['prompt' => 'Выберите звезду']);
+echo $form->field($model, 'star_id')->dropDownList($stars, ['prompt' => 'Выберите звезду']);
 ```
 
 Конечно, вы можете обойтись без переменной `$stars`, записав этот код одну строку. Ну и после всего, для этой формы 
