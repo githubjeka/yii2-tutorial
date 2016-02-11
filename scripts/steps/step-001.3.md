@@ -174,7 +174,7 @@ codecept run functional functional/PlanetFormCept.php
 ```
 
 Как видно запустился 1 тест и выполнилось 0 проверок. Теперь к тесту добавим команду на открытие страницы с формой. 
-ля этого нужно создать объект этой страницы. В директории `yii2-app-advanced/tests/codeception/backend/_pages/` создайте
+Для этого нужно создать объект этой страницы. В директории `yii2-app-advanced/tests/codeception/backend/_pages/` создайте
 `PlanetFormPage.php` с содержимым:
 
 ```php
