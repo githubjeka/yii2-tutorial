@@ -1,17 +1,19 @@
-#Интерактивное руководство создания сайта на Yii2 на русском языке
+# Yii2 Интерактивное руководство создания сайта на русском языке
 
 ## Содержание
 
-1. Начальная установка
-2. Знакомство с Advanced [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0)](https://travis-ci.org/githubjeka/yii2-tutorial)
-3. Виды и шаблоны [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.1)](https://travis-ci.org/githubjeka/yii2-tutorial)
-4. Формы, Active Record, Gii, Валидация. [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.2)](https://travis-ci.org/githubjeka/yii2-tutorial)
-5. Сессия. События и поведения. Сохранение данных.
-6. Backend. GridView. Авторизация.
-7. Знакомство с тестированием.
-8. Доступ к реляционным данным.
-9. Отображение реляционных данных.[![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-1.2)](https://travis-ci.org/githubjeka/yii2-tutorial)
-10. Сохранение реляционных данных.
+| Наименование | Состояние  |
+|---|---|
+| 1. Начальная установка  |   |
+| 2. Знакомство с Advanced   |  [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0)](https://travis-ci.org/githubjeka/yii2-tutorial)  |
+| 3. Виды и шаблоны | [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.1)](https://travis-ci.org/githubjeka/yii2-tutorial)
+| 4. Формы, Active Record, Gii, Валидация. | [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.2)](https://travis-ci.org/githubjeka/yii2-tutorial)
+| 5. Сессия. События и поведения. Сохранение данных.| 
+| 6. Backend. GridView. Авторизация.| [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-0.4)](https://travis-ci.org/githubjeka/yii2-tutorial)
+| 7. Знакомство с тестированием.| 
+| 8. Доступ к реляционным данным.| 
+| 9. Отображение реляционных данных.| [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-1.2)](https://travis-ci.org/githubjeka/yii2-tutorial)
+| 10. Сохранение реляционных данных.| 
 
 ##Запуск
 Для запуска понадобится Git и PHP.
@@ -20,7 +22,7 @@
 Вы можете скачать и установить git из [http://git-scm.com/download](http://git-scm.com/download). 
 После установки вы должны иметь доступ к git командной строки. Основные команды, которые вам понадобятся:
 
-- `git clone` клонирует удалённый репозиторий на локальную компьютер
+- `git clone` клонирует удалённый репозиторий на локальный компьютер
 - `git checkout` проверяет определённый тег или версию кода и переключается на него
  
 ###Установка PHP
@@ -50,16 +52,16 @@ php -S localhost:9000
 
 ### Как обновить руководство до актуального состояния?
 
-Самый простой способ удалить учебник и повторить шаги из секции "Установка руководства".
+Самый простой способ - удалить учебник и повторить шаги из секции "Установка руководства".
 
-Второй способ скачать только отличия, которых в вашей версии руководства нету. Для этого выполните:
+Второй способ - скачать только отличия, которых в вашей версии руководства нету. Для этого выполните:
 
 ```
 cd yii2-tutorial
 git remote update
 ```
 
-Далее нужно обратить внимание на ветки git, которые имеют изменения и выполнить для них команды. Например для `master`:
+Далее нужно обратить внимание на ветки git, которые имеют изменения:
 
 ```
 git remote update                                         
@@ -69,23 +71,28 @@ git remote update
     remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
     Unpacking objects: 100% (3/3), done.                        
     From https://github.com/githubjeka/yii2-tutorial            
-       8d08bb3..537ddc6  master     -> origin/master  
-                                                            
-\yii2-tutorial (master)                          
-git pull                                                  
-    Updating 8d08bb3..537ddc6                                   
-    Fast-forward                                                
+       8d08bb3..537ddc6  master     -> origin/master
+       9aa3ff1..fb14483  step-1.2   -> origin/step-1.2                                    
+```
+  
+Изменения имеются в `master` и `step-1.2` ветках. Их необходимо локально обновить, выполнив команды `git checkout` и
+`git pull`. Например для `step-1.2` необходимо выполнить в yii2-tutorial:
+  
+```
+  git checkout step-1.2
+  git pull  
+                                               
+    Updating 9aa3ff1..fb14483                                   
+    Fast-forward                     
      readme.md | 15 ++++++++++++++-                             
      1 file changed, 14 insertions(+), 1 deletion(-)            
 ```
 
 ### Лицензия & Авторские права
 
-Весь материал (с) 2015 Evgeniy Tkachenko (<et.coder@gmail.com>)
-
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.ru">
 <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" />
 </a>
 
-"Интерактивное руководство создания сайта на Yii2 на русском языке" распространятся под 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.ru">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.</a>
+Yii2 Интерактивное руководство создания сайта на русском языке (с) 2015 Evgeniy Tkachenko (<et.coder@gmail.com>)
+распространятся под <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.ru">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.</a>
