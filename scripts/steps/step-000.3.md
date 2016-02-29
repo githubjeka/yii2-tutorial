@@ -321,7 +321,7 @@ class AccessOnce extends Behavior
     {
         $owner = $this->owner;
     
-        if ($owner instanceof Controller) {
+        if ($owner instanceof \yii\web\Controller) {
             return [
                 $owner::EVENT_BEFORE_ACTION => 'имя_обработчика',
                 $owner::EVENT_AFTER_ACTION => 'имя_обработчика',
@@ -337,7 +337,7 @@ class AccessOnce extends Behavior
 EVENT_BEFORE_ACTION и EVENT_AFTER_ACTION у этих объектов может и не быть. Поэтому вводим дополнительную проверку
 
 ```php
-if ($owner instanceof Controller) {
+if ($owner instanceof \yii\web\Controller) {
 ```
 
 которая ограничит неверное использование поведения AccessOnce.
@@ -414,7 +414,7 @@ class AccessOnce extends Behavior
     {
         if (in_array($event->action->id, $this->actions, true)) {
             if (\Yii::$app->session->get($event->action->id . '-access-lock') !== null) {
-                throw new HttpException(403, $this->message);
+                throw new \yii\web\HttpException(403, $this->message);
             }
         }
     }
@@ -424,7 +424,7 @@ class AccessOnce extends Behavior
 При срабатывании 
 
 ```php
-throw new HttpException(403, $this->message);
+throw new \yii\web\HttpException(403, $this->message);
 ```
 
 пользователя перекинет на `/index.php?r=site/error`. Самостоятельно попробуйте разобраться как сработает `site/error`.
@@ -432,7 +432,7 @@ throw new HttpException(403, $this->message);
 После всего сделанного, в итоге имеем:
 
 ```php
-class SiteController extends Controller
+class SiteController extends \yii\web\Controller
 {  
     public function behaviors()
     {
@@ -454,7 +454,7 @@ class AccessOnce extends Behavior
     {
         $owner = $this->owner;
 
-        if ($owner instanceof Controller) {
+        if ($owner instanceof \yii\web\Controller) {
             return [
                 $owner::EVENT_BEFORE_ACTION => 'checkAccess',
                 $owner::EVENT_AFTER_ACTION => 'closeDoor',
