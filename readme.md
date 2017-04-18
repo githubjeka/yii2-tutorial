@@ -15,17 +15,17 @@
 | 9. Отображение реляционных данных.| [![Build Status](https://travis-ci.org/githubjeka/yii2-tutorial.svg?branch=step-1.2)](https://travis-ci.org/githubjeka/yii2-tutorial)
 | 10. Сохранение реляционных данных.| 
 
-##Запуск
+## Запуск
 Для запуска понадобится Git и PHP.
 
-###Установка Git
+### Установка Git
 Вы можете скачать и установить git из [http://git-scm.com/download](http://git-scm.com/download). 
 После установки вы должны иметь доступ к git командной строки. Основные команды, которые вам понадобятся:
 
 - `git clone` клонирует удалённый репозиторий на локальный компьютер
 - `git checkout` проверяет определённый тег или версию кода и переключается на него
  
-###Установка PHP
+### Установка PHP
 Для запуска понадобится PHP версии не ниже 5.4 версии.
 Скачать можно отсюда: [http://php.net/downloads.php](http://php.net/downloads.php)
 
